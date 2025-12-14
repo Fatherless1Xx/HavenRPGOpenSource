@@ -5990,7 +5990,7 @@ taken by anyone who obtains high\nenough standing, it cannot fall below
       if (ch->faction != 0 && clan_lookup(ch->faction) != NULL) {
         printf_to_char(ch, "`cMessages for %s`W:`x\n\n\r", clan_lookup(ch->faction)->name);
         for (i = 0; i < 20; i++) {
-          if (safe_strlen(clan_lookup(ch->faction)->messages[i]) > 2 && clan_lookup(ch->faction)->message_timer > 0)
+          if (safe_strlen(clan_lookup(ch->faction)->messages[i]) > 2 && clan_lookup(ch->faction)->message_timer != NULL && clan_lookup(ch->faction)->message_timer[i] > 0)
           printf_to_char(ch, "%s\n\r", clan_lookup(ch->faction)->messages[i]);
         }
       }
@@ -6292,7 +6292,7 @@ taken by anyone who obtains high\nenough standing, it cannot fall below
       }
       printf_to_char(ch, "`cLogs`W:`x\n\n\r");
       for (i = 0; i < 20; i++) {
-        if (safe_strlen(fac->log[i]) > 2 && fac->log_timer > 0)
+        if (safe_strlen(fac->log[i]) > 2 && fac->log_timer != NULL && fac->log_timer[i] > 0)
         printf_to_char(ch, "%s\n\r", fac->log[i]);
       }
     }
@@ -19523,7 +19523,7 @@ diffval = highval - lowval;
     if(IS_NPC(ch))
     return FALSE;
 
-    if(ch->pcdata->in_domain == NULL || ch->pcdata->in_domain <= 0)
+    if(ch->pcdata->in_domain <= 0)
     return FALSE;
 
     if(ch->fcult <= 0)

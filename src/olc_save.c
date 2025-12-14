@@ -92,7 +92,7 @@ extern "C" {
       buffer[x + 8] = '\0';
       return buffer;
     }
-    return '\0';
+    return NULL;
   }
 
   /*****************************************************************************
@@ -105,7 +105,7 @@ Purpose:	Returns a string without \r and ~.
     int o;
 
     if (str == NULL)
-    return '\0';
+    return NULL;
 
     for (o = i = 0; str[i + o] != '\0'; i++) {
       if (str[i + o] == '\r' || str[i + o] == '~')
