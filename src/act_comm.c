@@ -493,7 +493,7 @@ extern "C" {
       return;
     }
 
-    if (ch->pcdata->buffer[0] == '\0') {
+    if (ch->pcdata->buffer == NULL || ch->pcdata->buffer->dataLength() <= 0) {
       send_to_char("You have no tells to replay.\n\r", ch);
       return;
     }
@@ -9653,7 +9653,7 @@ extern "C" {
 
     }
 
-    for (; safe_strlen(arg1) > 0 && arg1 != '\0';) {
+    for (; safe_strlen(arg1) > 0 && arg1[0] != ' ';) {
       if (input == 0) {
         if (str_cmp(arg1, "with")) {
           strcat(attempt, arg1);
@@ -11077,7 +11077,7 @@ extern "C" {
       return;
     }
 
-    for (; safe_strlen(arg1) > 0 && arg1 != '\0';) {
+    for (; safe_strlen(arg1) > 0 && arg1[0] != ' ';) {
       if (input == 0) {
         if (str_cmp(arg1, "with")) {
           strcat(attempt, arg1);
@@ -11252,7 +11252,7 @@ extern "C" {
     if (!str_cmp(arg1, "Against"))
     argument = one_argument_nouncap(argument, arg1);
 
-    for (; safe_strlen(arg1) > 0 && arg1 != '\0';) {
+    for (; safe_strlen(arg1) > 0 && arg1[0] != ' ';) {
       if (input == 0) {
         if (str_cmp(arg1, "with")) {
           strcat(attempt, arg1);
@@ -11505,7 +11505,7 @@ extern "C" {
     if (is_gm(ch)) {
       argument = one_argument_nouncap(argument, arg1);
 
-      for (; safe_strlen(arg1) > 0 && arg1 != '\0';) {
+      for (; safe_strlen(arg1) > 0 && arg1[0] != ' ';) {
         if (input == 0) {
           if (str_cmp(arg1, "with")) {
             strcat(attempt, arg1);

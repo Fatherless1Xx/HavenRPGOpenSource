@@ -5481,7 +5481,8 @@ extern "C" {
   int color(char type, CHAR_DATA *ch, char *string) {
     PC_DATA *col;
     char code[50];
-    char *p = '\0';
+	/* Must be a null pointer, not a '\0' character literal. */
+	char *p = NULL;
 
     if (ch != NULL && IS_NPC(ch))
     return (0);
@@ -7068,7 +7069,7 @@ extern "C" {
       count = 0;
       FACTION_TYPE *fac = clan_lookup(ch->fcult);
       for (i = 0; i < 20; i++) {
-        if (fac != NULL && safe_strlen(fac->messages[i]) > 2 && fac->message_timer > 0) {
+	    	if (fac != NULL && fac->messages[i] != NULL && safe_strlen(fac->messages[i]) > 2 && fac->message_timer[i] > 0) {
           if (count == 0) {
             sprintf(buf, "`cIn Cult news for %s;`x\n\r", fac->name);
             strcat(string, buf);
@@ -7083,7 +7084,7 @@ extern "C" {
       count = 0;
       FACTION_TYPE *fac = clan_lookup(ch->fsect);
       for (i = 0; i < 20; i++) {
-        if (fac != NULL && safe_strlen(fac->messages[i]) > 2 && fac->message_timer > 0) {
+	    	if (fac != NULL && fac->messages[i] != NULL && safe_strlen(fac->messages[i]) > 2 && fac->message_timer[i] > 0) {
           if (count == 0) {
             sprintf(buf, "`cIn Sect news for %s;`x\n\r", fac->name);
             strcat(string, buf);
@@ -7708,7 +7709,9 @@ extern "C" {
           ch->desc = d;
           ch->timer = 0;
           ch->idle = current_time;
-          if (ch->pcdata->buffer[0] == '\0') {
+	      /* pcdata->buffer is a Buffer* in this codebase. */
+	      if (ch->pcdata->buffer == NULL || ch->pcdata->buffer->getLen() <= 0) {
+
             send_to_char("Reconnecting. No missed tells.\n\r", ch);
           }
           else {

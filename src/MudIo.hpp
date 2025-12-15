@@ -52,7 +52,7 @@ public:
 	char getch()
 	{
 		if ( isEof() )
-			return '\0';
+			return NULL;
 		if ( *m_pcStart =='\n' )
 			m_iLine++;
 		return *m_pcStart++;
