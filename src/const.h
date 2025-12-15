@@ -2301,8 +2301,7 @@ typedef enum
 #else
     #define WEATHER_FILE	    "/home/laurin/coders/data/weather.dat"
 
-    #define RESOLVE_FILE        "/home/laurin/coders/data/resolve"
-    #define RACE_FILE		    "/home/laurin/coders/data/races.txt"
+	#define RACE_FILE		    "/home/laurin/coders/data/races.txt"
     #define SUBRACE_FILE    	"/home/laurin/coders/data/subraces.txt"
     #define PORT_FILE    	    "/home/laurin/coders/data/ports.txt"
     #define VESSEL_FILE    	    "/home/laurin/coders/data/vessels.txt"    

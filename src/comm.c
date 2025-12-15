@@ -597,97 +597,90 @@ extern "C" {
 
 
 #if defined(unix)
-  void create_ident( DESCRIPTOR_DATA *d, long ip )
+
+void create_ident( DESCRIPTOR_DATA *d, long ip )
+{
+  int fds[2];
+  pid_t pid;
+  char str_ip[64];
+
+  d->ifd  = -1;
+  d->ipid = -1;
+
+  if ( pipe(fds) != 0 )
   {
-    int fds[2];
-    pid_t pid;
-
-    /* Create Pipe first */
-    if ( pipe( fds ) != 0 )
-    {
-      perror( "Create_ident: pipe: " );
-      return;
-    }
-
-    if ( dup2( fds[1], STDOUT_FILENO ) != STDOUT_FILENO )
-    {
-      perror( "Create_ident: dup2(stdout): " );
-      close( fds[0] );
-      return;
-    }
-
-    switch( (pid = fork()) )
-    {
-      char str_ip[64];
-
-      /* Parent Process */
-    default:
-      d->ifd  = fds[0];
-      d->ipid = pid;
-      break;
-
-      /* Child Process */
-    case 0:
-      d->ifd  = fds[0];
-      d->ipid = pid;
-
-      sprintf( str_ip, "%ld", ip );
-      //              execl( RESOLVE_FILE, "resolve", str_ip, 0 );
-      execl( RESOLVE_FILE, "resolve", str_ip, NULL );
-
-      /* Still here --> hmm. An error. */
-      log_string( "Exec failed; Closing child." );
-      close( fds[0] );
-      d->ifd  = -1;
-      d->ipid = -1;
-
-      exit( 0 );
-      break;
-
-      /* Error */
-    case (pid_t)-1:
-      perror( "Create_ident: fork" );
-      close( fds[0] );
-      break;
-    }
-
-    close( fds[1] );
+    perror("Create_ident: pipe");
+    return;
   }
+
+  pid = fork();
+  if ( pid < 0 )
+  {
+    perror("Create_ident: fork");
+    close(fds[0]);
+    close(fds[1]);
+    return;
+  }
+
+  if ( pid == 0 )
+  {
+    close(fds[0]);
+
+    if ( dup2(fds[1], STDOUT_FILENO) == -1 )
+      exit(0);
+
+    close(fds[1]);
+
+    snprintf(str_ip, sizeof(str_ip), "%ld", ip);
+    execl(RESOLVE_FILE, "resolve", str_ip, (char *)NULL);
+
+    exit(0);
+  }
+
+  close(fds[1]);
+  d->ifd  = fds[0];
+  d->ipid = pid;
+}
+
 #else
-  void create_ident( DESCRIPTOR_DATA *d, long ip )
+
+void create_ident( DESCRIPTOR_DATA *d, long ip )
+{
+  int fds[2];
+  char str_ip[64];
+
+  d->ifd  = -1;
+  d->ipid = -1;
+
+  if ( _pipe(fds, 4096, O_BINARY) != 0 )
   {
-    int fds[2];
-    char str_ip[64];
-
-    /* Create Pipe first */
-    if ( _pipe( fds, 64, O_TEXT ) != 0 )
-    {
-      perror( "Create_ident: pipe: " );
-      return;
-    }
-
-    if ( _dup2( fds[1], STDOUT_FILENO ) != STDOUT_FILENO )
-    {
-      perror( "Create_ident: dup2(stdout): " );
-      _close( fds[0] );
-      return;
-    }
-
-    sprintf( str_ip, "%ld", ip );
-    d->ipid = _spawnl(_P_NOWAIT, RESOLVE_FILE, "resolve", str_ip, 0);
-
-    if(d->ipid = -1)
-    {
-      log_string( "_Spawnl failed; Closing child." );
-      _close( fds[0] );
-      d->ifd  = -1;
-      d->ipid = -1;
-    }
-    _close( fds[1] );
+    perror("Create_ident: _pipe");
+    return;
   }
+
+  _snprintf(str_ip, sizeof(str_ip), "%ld", ip);
+
+  d->ipid = _spawnl(
+    _P_NOWAIT,
+    RESOLVE_FILE,
+    "resolve",
+    str_ip,
+    (char *)NULL
+  );
+
+  if ( d->ipid == -1 )
+  {
+    log_string("_spawnl failed; Closing child.");
+    _close(fds[0]);
+    _close(fds[1]);
+    return;
+  }
+
+  _close(fds[1]);
+  d->ifd = fds[0];
+}
+
 #endif
-
-
 
   int init_socket(int port) {
     static struct sockaddr_in sa_zero;
@@ -1330,7 +1323,7 @@ extern "C" {
     dnew = new_descriptor();
     dnew->descriptor = desc;
     dnew->mxp = FALSE; // Initially MXP is off - Discordance
-    dnew->connected = CON_IDENT_WAIT;
+    dnew->connected = CON_GET_NAME;
     dnew->ident = str_dup("???");
     dnew->ifd = -1;
     dnew->ipid = -1;
@@ -7557,8 +7550,13 @@ extern "C" {
       state_read_imotd(d, argument, ch);
       break;
 
-    case CON_READ_MOTD:
-      state_read_motd(d, argument, ch);
+	case CON_READ_MOTD:
+	  state_read_motd(d, argument, ch);
+  	  break;
+
+case CON_IDENT_WAIT:
+  break;
+
 
     case CON_IDENT_WAIT:
       break;
