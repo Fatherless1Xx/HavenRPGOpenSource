@@ -711,12 +711,7 @@ extern "C" {
       send_to_char("You cannot use that channel.\n\r", ch);
       return;
     }
-    // Added some checks so that immortals don't need donation credit to see
-    // Legends and OOC - Discordance
-    if ((bit == COMM_NOOOC && available_donated(ch) < 1000 && (!IS_IMMORTAL(ch)))) {
-      send_to_char("You cannot use that channel.\n\r", ch);
-      return;
-    }
+    // Legends - Discordance
     if ((bit == COMM_NOLEGEND && available_donated(ch) < 3000 && (!IS_IMMORTAL(ch)))) {
       send_to_char("You cannot use that channel.\n\r", ch);
       return;
@@ -842,9 +837,6 @@ extern "C" {
           continue;
 
           if (bit == COMM_NOSTALK && !IS_IMMORTAL(victim) && !IS_FLAG(victim->act, PLR_GM))
-          continue;
-
-          if (bit == COMM_NOOOC && available_donated(victim) < 1000)
           continue;
 
           if (bit == COMM_NOLEGEND && available_donated(victim) < 3000)
