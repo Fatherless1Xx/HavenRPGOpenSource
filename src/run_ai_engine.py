@@ -614,36 +614,6 @@ def social_rate(name_one, name_two):
     append_line_to_file("../data/ai_out.csv", outstring)
     logging.info(outstring)
         
-def describe_doom(char_name, days):
-    ai_model = "gpt-4"
-    #ai_model="gpt-3.5-turbo",
-    intemp = 0.8
-    max_size = 800
-    out_msg = []
-    fname = "../player/" + char_name
-    hist_text = extract_hist_section(fname)
-    otext = char_name + " is a character in a fictional horror setting. The setting is a small town in Massachusetts called Haven. In this setting supernatural forces such as vampires, werewolves and demons exist in secret. It is a horror setting, where power equals corruption. The character's history up to this point is:\n" + hist_text + "\nToday's date is " + dstring() + ". The character has been prophesied to die in " + str(days) + " days. Write the prophecy that foretells the character's death. It should be three of four sentences and include some details about how they are going to die. Do not include the exact date of their death. Start your response with 'Prophecy:'"
-    add_message(out_msg, "user", otext)
-    
-    
-    logging.info(out_msg)
-    response = openai.ChatCompletion.create(
-        model=ai_model,
-        messages=out_msg,
-        max_tokens=max_size,
-        temperature=intemp,
-        n=1,
-    )
-    logging.info(response)
-    response_role = response.choices[0].message.role
-    response_content = response.choices[0].message.content
-    response_content = clean_aioutput(response_content)
-    logging.info(response_content)
-    outstring = "3|||" + char_name + "|||" + str(days) + "|||" + response_content
-    logging.info(outstring)
-    append_line_to_file("../data/ai_out.csv", outstring)
-    
-    
 def describe_operation(antag_faction, area):
     ai_model = "gpt-4"
     #ai_model="gpt-3.5-turbo",
@@ -1054,8 +1024,6 @@ while True:
             create_encounter(ai_input.iloc[i]['ID'])
         if(ai_input.iloc[i]['Type'] == 2):
             describe_operation(ai_input.iloc[i]['ValOne'], ai_input.iloc[i]['ValTwo'])
-        if(ai_input.iloc[i]['Type'] == 3):
-            describe_doom(ai_input.iloc[i]['ValOne'], ai_input.iloc[i]['ValTwo'])
         if(ai_input.iloc[i]['Type'] == 4):
             social_rate(ai_input.iloc[i]['ValOne'], ai_input.iloc[i]['ValTwo'])       
         if(ai_input.iloc[i]['Type'] == 5):

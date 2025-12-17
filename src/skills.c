@@ -312,7 +312,7 @@ extern "C" {
     return DTYPE_UNKNOWN;
   }
 
-  const char *fac_names_2[4] = {"", "Hand", "Order", "Temple"};
+  const char *fac_names_2[4] = {"", "Illuminati", "Order", "Temple"};
 
   int skillcount(CHAR_DATA *ch, int type) {
     int i, count = 0;
@@ -3628,7 +3628,7 @@ extern "C" {
         {
           if((combat_focus(ch) + 1 ) > 1 && (combat_focus(ch) +1) > arcane_focus(ch) && (combat_focus(ch) + 1) > prof_focus(ch))
           {
-            send_to_char("As a manipulative faction the Hand hard restricts characters who are too heavily combat focused. You will need to leave the Hand before training this.\n\r", ch);
+            send_to_char("As a manipulative faction the Illuminati hard restricts characters who are too heavily combat focused. You will need to leave the Illuminati before training this.\n\r", ch);
             return;
           }
         }
@@ -3644,7 +3644,7 @@ extern "C" {
         {
           if((prof_focus(ch) + 1 ) > 1 && (prof_focus(ch) +1) > arcane_focus(ch) && (prof_focus(ch) + 1) > arcane_focus(ch))
           {
-            send_to_char("As a faction adverse to inequality the Order hard restricts characters who are too heavily professionally focused. You will need to leave the Order before training this.\n\r", ch);
+            send_to_char("As a faction that rejects rigid institutions the Anarchists hard restrict characters who are too heavily professionally focused. You will need to leave the Anarchists before training this.\n\r", ch);
             return;
           }
         }
@@ -11320,13 +11320,36 @@ extern "C" {
     return total;
   }
 
+  static int rp_karma_week_id() {
+    tm *ptm;
+    time_t east_time;
+
+    east_time = current_time - 14400;
+    east_time -= 3600;
+
+    ptm = gmtime(&east_time);
+    if (ptm == NULL)
+    return 0;
+
+    int days_since_friday = (ptm->tm_wday - 5 + 7) % 7;
+    int seconds_since_cutoff =
+    (days_since_friday * 86400) +
+    ((ptm->tm_hour * 3600) + (ptm->tm_min * 60) + ptm->tm_sec - (16 * 3600));
+
+    if (seconds_since_cutoff < 0)
+    seconds_since_cutoff += 7 * 86400;
+
+    time_t week_start = east_time - seconds_since_cutoff;
+    return (int)(week_start / (7 * 86400));
+  }
+
   void give_karma(CHAR_DATA *ch, int amount, int type) {
 
     if (ch == NULL || ch->in_room == NULL)
     return;
 
 
-    if (!other_players(ch) && type == KARMA_AMBIANT && !battleground(ch->in_room) && !has_mystery(ch))
+    if (!other_players(ch) && (type == KARMA_AMBIANT || type == KARMA_RP) && !battleground(ch->in_room) && !has_mystery(ch))
     return;
 
     if (IS_FLAG(ch->comm, COMM_PRIVATE) && !IS_FLAG(ch->act, PLR_AFTERGLOW)) {
@@ -11360,6 +11383,38 @@ extern "C" {
       }
       return;
     }
+
+    if (type == KARMA_RP && ch->pcdata->account != NULL && !is_gm(ch)) {
+      int week_id = rp_karma_week_id();
+      if (ch->pcdata->account->weekly_rp_karma_week != week_id) {
+        ch->pcdata->account->weekly_rp_karma_week = week_id;
+        ch->pcdata->account->weekly_rp_karma = 0;
+      }
+
+      int remaining = 2000 - ch->pcdata->account->weekly_rp_karma;
+      if (remaining <= 0)
+      return;
+
+      int award_karma = UMAX(0, ch->pcdata->account->award_karma);
+      int max_base;
+      if (award_karma <= 0) {
+        max_base = remaining;
+      }
+      else if (remaining <= award_karma) {
+        max_base = remaining / 2;
+      }
+      else {
+        int option2 = remaining - award_karma;
+        if (option2 < award_karma)
+        max_base = remaining / 2;
+        else
+        max_base = option2;
+      }
+
+      amount = UMIN(amount, max_base);
+      if (amount <= 0)
+      return;
+    }
     int ramount = amount;
 
     if (ch->pcdata->account != NULL) {
@@ -11372,22 +11427,31 @@ extern "C" {
       }
 
 
-      int bonus = UMIN(ch->pcdata->account->award_karma, amount);
-      ch->pcdata->account->karma += amount;
-      ch->pcdata->account->karma += bonus;
+      if (type == KARMA_RP && !is_gm(ch)) {
+        int bonus = UMIN(ch->pcdata->account->award_karma, amount);
+        ch->pcdata->account->karma += amount + bonus;
+        ramount = amount + bonus;
+        ch->pcdata->account->award_karma -= bonus;
+        ch->pcdata->account->weekly_rp_karma += ramount;
+      }
+      else {
+        int bonus = UMIN(ch->pcdata->account->award_karma, amount);
+        ch->pcdata->account->karma += amount;
+        ch->pcdata->account->karma += bonus;
 
-      ramount += bonus;
+        ramount += bonus;
 
-      ch->pcdata->account->award_karma -= bonus;
-      if (ch->karma > 0)
-      ch->pcdata->account->karma += ch->karma;
-      ch->karma = 0;
+        ch->pcdata->account->award_karma -= bonus;
+        if (ch->karma > 0)
+        ch->pcdata->account->karma += ch->karma;
+        ch->karma = 0;
 
-      if (ch->pcdata->account->karmabank > 0) {
-        ch->pcdata->account->karma +=
-        UMIN(ch->pcdata->account->karmabank, amount * 4);
-        ch->pcdata->account->karmabank -=
-        UMIN(ch->pcdata->account->karmabank, amount * 4);
+        if (ch->pcdata->account->karmabank > 0) {
+          ch->pcdata->account->karma +=
+          UMIN(ch->pcdata->account->karmabank, amount * 4);
+          ch->pcdata->account->karmabank -=
+          UMIN(ch->pcdata->account->karmabank, amount * 4);
+        }
       }
     }
     else if (!is_gm(ch))
@@ -11424,6 +11488,8 @@ extern "C" {
     else if (type == KARMA_MYSTERY)
     ch->pcdata->account->mystery_karma += ramount;
     else if (type == KARMA_AMBIANT)
+    ch->pcdata->account->ambiant_karma += ramount;
+    else if (type == KARMA_RP)
     ch->pcdata->account->ambiant_karma += ramount;
     else if (type == KARMA_MONSTER)
     ch->pcdata->account->monster_karma += ramount;
@@ -38614,6 +38680,8 @@ extern "C" {
     account->scheme_karma = 0;
     account->offworld_karma = 0;
     account->other_karma = 0;
+    account->weekly_rp_karma = 0;
+    account->weekly_rp_karma_week = 0;
     account->storyidea_cooldown = 0;
     account->encounter_cooldown = 0;
     account->target_encounter_cooldown = 0;
@@ -39023,7 +39091,7 @@ extern "C" {
   _DOFUN(do_eidilon) {
     char arg1[MSL];
     argument = one_argument_nouncap(argument, arg1);
-    if (ch->pcdata->ci_editing == 18 || ch->pcdata->ci_editing == 19) {
+    if (ch->pcdata->ci_editing == 19) {
       ch->pcdata->ci_absorb = 1;
       FACTION_TYPE *cult = clan_lookup(ch->fcult);
       FACTION_TYPE *sect = clan_lookup(ch->fsect);
@@ -39094,12 +39162,7 @@ extern "C" {
   }
 
   _DOFUN(do_base) {
-    if (ch->pcdata->ci_editing == 18) {
-      ch->pcdata->ci_absorb = 1;
-      ch->pcdata->ci_discipline = number_range(ENCOUNTER_ONE, ENCOUNTER_MAX);
-      printf_to_char(ch, "New Base encounter: %s\n\r", encounter_prompt(ch, ch->pcdata->ci_discipline).c_str());
-      return;
-    }
+    send_to_char("Nothing happens.\n\r", ch);
   }
 
   ANNIVERSARY_TYPE * get_anniversary_today()

@@ -7165,7 +7165,7 @@ extern "C" {
     if (IS_SET(poi->extra_flags, ITEM_NOINVENTORY))
     REMOVE_BIT(poi->extra_flags, ITEM_NOINVENTORY);
 
-    if (!is_gm(ch) && !higher_power(ch) && colour == FALSE) {
+    if (colour == FALSE) {
       remove_color(nocol, ch->pcdata->ci_short);
       poi->short_descr = str_dup(nocol);
       free_string(poi->description);
@@ -7709,7 +7709,7 @@ extern "C" {
       }
 
       if (ch->pcdata->ci_vnum == 1) {
-        custom_to_obj(ch, ch->pcdata->customizing, FALSE);
+        custom_to_obj(ch, ch->pcdata->customizing, TRUE);
         return;
       }
 
@@ -7751,21 +7751,6 @@ extern "C" {
 
       }
       */
-
-      bool shop_color = FALSE;
-      int min_col_cost = expensive_item_level(ci_type_to_item_type(ch->pcdata->ci_type))*100;
-      if (strcasestr(ch->pcdata->ci_short, "`") != NULL || strcasestr(ch->pcdata->ci_short, "`") != NULL)
-      {
-        char logs[MSL];
-        sprintf(logs, "EXPENSIVE: %d %d %d %d", ch->pcdata->ci_type, ci_type_to_item_type(ch->pcdata->ci_type), ch->pcdata->ci_cost, min_col_cost);
-        log_string(logs);
-        if(ch->pcdata->ci_cost < min_col_cost)
-        {
-          printf_to_char(ch, "To create that shop item as a colored item it would need to cost at least %d dollars.\n\r", min_col_cost/100);
-          return;
-        }
-        shop_color = TRUE;
-      }
 
       int value;
       if (IS_SET(poi->wear_flags, ITEM_WEAR_BODY)) {
@@ -7907,18 +7892,9 @@ extern "C" {
         smash_vector(ch->pcdata->ci_imprint);
       }
 
-      if (!is_gm(ch) && !higher_power(ch) && shop_color == FALSE) {
-        remove_color(nocol, ch->pcdata->ci_short);
-        poi->short_descr = str_dup(nocol);
-        free_string(poi->description);
-        remove_color(nocol, ch->pcdata->ci_long);
-        poi->description = str_dup(nocol);
-      }
-      else {
-        poi->short_descr = str_dup(ch->pcdata->ci_short);
-        free_string(poi->description);
-        poi->description = str_dup(ch->pcdata->ci_long);
-      }
+      poi->short_descr = str_dup(ch->pcdata->ci_short);
+      free_string(poi->description);
+      poi->description = str_dup(ch->pcdata->ci_long);
 
       poi->cost = ch->pcdata->ci_cost;
 
@@ -8935,32 +8911,8 @@ extern "C" {
 
     }
     else if (ch->pcdata->ci_editing == 18) {
-      if(strlen(ch->pcdata->ci_short) < 2)
-      {
-        send_to_char("You have to specify the Eidolon that the encounter will be caused by.\n\r", ch);
-        return;
-      }
-      if(strlen(ch->pcdata->ci_desc) < 100)
-      {
-        send_to_char("You have to specify the encounter text.\n\r", ch);
-        return;
-      }
-      FACTION_TYPE *cult = clan_lookup(ch->fcult);
-      FACTION_TYPE *sect = clan_lookup(ch->fsect);
-      int fpoint = 0;
-      if(cult != NULL && !str_cmp(cult->eidilon, ch->pcdata->ci_short))
-      fpoint = cult->vnum;
-      else if(sect != NULL && !str_cmp(sect->eidilon, ch->pcdata->ci_short))
-      fpoint = sect->vnum;
-      else
-      {
-        send_to_char("You aren't in a cult or sect with that Eidolon.\n\r", ch);
-        return;
-      }
-
-      add_encounter(2, ch->pcdata->ci_discipline, ch->pcdata->ci_desc, fpoint);
       ch->pcdata->ci_editing = 0;
-      send_to_char("Done.\n\r", ch);
+      send_to_char("Encounters have been removed.\n\r", ch);
       return;
     }
     else if (ch->pcdata->ci_editing == 19) {
@@ -9543,16 +9495,16 @@ extern "C" {
           return;
         }
         if (clan_lookup(ch->faction)->parent == FACTION_HAND) {
-          if (str_cmp("The Hand", first_dom_terr(loc))) {
-            if (str_cmp("The Hand", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
+          if (str_cmp("The Illuminati", first_dom_terr(loc))) {
+            if (str_cmp("The Illuminati", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
               send_to_char("You're not close enough with the government of that territory for that.\n\r", ch);
               return;
             }
           }
         }
         if (clan_lookup(ch->faction)->parent == FACTION_ORDER) {
-          if (str_cmp("The Order", first_dom_terr(loc))) {
-            if (str_cmp("The Order", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
+          if (str_cmp("The Anarchists", first_dom_terr(loc))) {
+            if (str_cmp("The Anarchists", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
               send_to_char("You're not close enough with the government of that territory for that.\n\r", ch);
               return;
             }

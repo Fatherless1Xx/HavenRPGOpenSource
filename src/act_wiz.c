@@ -9271,62 +9271,6 @@ extern "C" {
     return;
   }
 
-  _DOFUN(do_setdoom) {
-    CHAR_DATA *victim;
-    DESCRIPTOR_DATA d;
-    bool online = FALSE;
-    char arg1[MSL];
-    char buf[MSL];
-
-    if (argument[0] == '\0') {
-      send_to_char("Nonote whom?\n\r", ch);
-      return;
-    }
-
-    argument = one_argument_nouncap(argument, arg1);
-
-    d.original = NULL;
-    if ((victim = get_char_world(ch, arg1)) != NULL) // Victim is online.
-    online = TRUE;
-    else {
-      if ((victim = get_char_world_pc(arg1)) != NULL) // Victim is online.
-      online = TRUE;
-      else {
-        log_string("DESCRIPTOR: nonote");
-
-        if (!load_char_obj(&d, arg1)) {
-          printf_to_char(ch, "\n\r%s is not a character!\n\r", capitalize(arg1));
-          return;
-        }
-        victim = d.character;
-      }
-    }
-    if (IS_NPC(victim)) {
-      if (!online)
-      free_char(victim);
-
-      send_to_char("\n\rYou can't target mobiles!\n\r", ch);
-      return;
-    }
-    if (IS_NPC(victim)) {
-      if (!online)
-      free_char(victim);
-
-      send_to_char("\n\rYou can't target mobiles!\n\r", ch);
-      return;
-    }
-    free_string(victim->pcdata->doom_custom);
-    victim->pcdata->doom_custom = str_dup(argument);
-    save_char_obj(victim, FALSE, FALSE);
-
-    if (!online)
-    free_char(victim);
-
-    send_to_char("Done.\n\r", ch);
-    return;
-  }
-
-
   _DOFUN(do_tempcommand)
   {
     time_info.sect_alliance_issue = time_info.cult_alliance_issue;

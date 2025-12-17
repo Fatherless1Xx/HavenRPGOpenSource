@@ -1896,7 +1896,7 @@ void create_ident( DESCRIPTOR_DATA *d, long ip )
   }
 
   const char *fac_names_3[4] = {
-    "", "Hand", "Order", "Temple"
+    "", "Illuminati", "Order", "Temple"
   };
 
   const char *petition_types[4] = {
@@ -2555,13 +2555,6 @@ void create_ident( DESCRIPTOR_DATA *d, long ip )
       printf_to_char(ch, "Boon: %s\n\r", boon_names[ch->pcdata->ci_disclevel]);
       printf_to_char(ch, "Curse: %s\n\r", curse_names[ch->pcdata->ci_zips]);
       printf_to_char(ch, "Cost: $%d\n\r", blessing_cost(ch, ch->pcdata->ci_disclevel, ch->pcdata->ci_zips));
-    }
-    else if(ch->pcdata->ci_editing == 18) {
-      send_to_char("`CEidolon Encounter`x\n\r", ch);
-      printf_to_char(ch, "Eidolon: %s\n\r", ch->pcdata->ci_short);
-      printf_to_char(ch, "Base: %s\n\r", encounter_prompt(ch, ch->pcdata->ci_discipline).c_str());
-      printf_to_char(ch, "Prompt: %s\n\r", ch->pcdata->ci_desc);
-
     }
     else if(ch->pcdata->ci_editing == 19) {
       send_to_char("`CEidolon Patrol`x\n\r", ch);
@@ -8089,6 +8082,10 @@ void create_ident( DESCRIPTOR_DATA *d, long ip )
         KEY("VillainScore", account->villain_score, fread_number(fp));
         KEY("VillainMod", account->villain_mod, fread_number(fp));
         break;
+      case 'W':
+        KEY("WeeklyRpKarma", account->weekly_rp_karma, fread_number(fp));
+        KEY("WeeklyRpKarmaWeek", account->weekly_rp_karma_week, fread_number(fp));
+        break;
       case 'X':
         KEY("Xp", account->xp, fread_number(fp));
         break;
@@ -8253,6 +8250,10 @@ void create_ident( DESCRIPTOR_DATA *d, long ip )
       fprintf(fp, "Karma %d\n", account->karma);
       if (account->karmaearned != 0)
       fprintf(fp, "KarmaEarned %d\n", account->karmaearned);
+      if (account->weekly_rp_karma != 0) {
+        fprintf(fp, "WeeklyRpKarma %d\n", account->weekly_rp_karma);
+        fprintf(fp, "WeeklyRpKarmaWeek %d\n", account->weekly_rp_karma_week);
+      }
       if (account->pkarma != 0)
       fprintf(fp, "PKarma %d\n", account->pkarma);
       if (account->encounter_karma != 0)

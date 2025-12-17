@@ -4044,6 +4044,7 @@ typedef enum
 #define KARMA_MONSTER 5
 #define KARMA_OTHER 6
 #define KARMA_SCHEME 7
+#define KARMA_RP 8
 #define KARMA_DREAM 9
 
     #define PROPERTY_TOWNHOUSE 1
@@ -4502,4 +4503,3 @@ typedef enum
 #endif
 
 #endif
-

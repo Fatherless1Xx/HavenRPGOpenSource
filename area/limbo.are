@@ -1087,12 +1087,12 @@ normal~
 
 #100
 handsoldier man dark sturdy clothes soldier~
-`DHand soldier in dark, study clothes`x~
-A Hand soldier in dark, sturdy clothes
+`DIlluminati soldier in dark, sturdy clothes`x~
+An Illuminati soldier in dark, sturdy clothes
 ~
-This man is dressed in dark, sturdy clothes.  Jeans and combat boots with
-a heavy coat that mostly conceals a short black pump action shotgun.  A ring
-on his right hand features a symbol of a fist.  
+This person is dressed in dark, sturdy clothes: jeans and combat boots with
+a heavy coat that mostly conceals a short black pump action shotgun. A ring
+on their right hand features an Eye of Providence.  
 ~
 soldier~
 ~
@@ -1111,13 +1111,13 @@ D 25 30
 
 #101
 handlieutenant black armored soldier modern lieutenant~
-`DHand lieutenant in black modern armor`x~
-A Hand lieutenant in black modern armor
+`DIlluminati lieutenant in black modern armor`x~
+An Illuminati lieutenant in black modern armor
 ~
 This figure is dressed in modern black ballistic armor not very well
-covered by bulky street clothes, their face is hidden behind a helmet but a
-heavy combat knife is visible on their thigh, as is a symbol of a fist on
-their shoulder.  
+covered by bulky street clothes, their face hidden behind a helmet. A heavy
+combat knife is visible on their thigh, as is an Eye of Providence on their
+shoulder.  
 ~
 soldier~
 ~
@@ -1137,13 +1137,12 @@ D 41 75
 
 #102
 ordersoldier brown coat soldier~
-`WOrder soldier in a long brown coat`x~
-An Order soldier in a long brown coat
+`WAnarchist raider in a battered coat`x~
+An Anarchist raider in a battered coat
 ~
-This figure is dressed in practical street clothes and a heavy long brown
-suede coat which just barely fails to conceal the shiny metal of ringmail on
-their torso and the sword at their hip.  The crossguard of the sword
-features a symbol of a scroll crossed with a sword.  
+This figure is dressed in practical street clothes and a heavy long coat
+that just barely conceals scavenged armor plates and a blade at their hip.
+A crude circled A is painted across their jacket like a warning.  
 ~
 civilian~
 ~
@@ -1162,13 +1161,12 @@ D 26 20
 
 #103
 orderlieutenant well-armored armored sword sawn-off shotgun lieutenant~
-`Warmored Order lieutenant with a sword and sawn-off`x~
-An armored Order lieutenant  with a sword and sawn-off
+`Warmed Anarchist lieutenant with a blade and sawn-off`x~
+An armed Anarchist lieutenant with a blade and sawn-off
 ~
-This man is dressed entirely in modernized plate mail armor, with a long
-brown coat doing a bad job of attempting to conceal it.  A large broadsword
-is held in one hand while a double barrel sawn off shotgun is in the other. 
-A symbol of a sword crossed with a scroll is emblazoned on his armor.  
+This fighter is dressed in scavenged armor plates under a long coat. A
+large blade is held in one hand while a double barrel sawn off shotgun is in
+the other. A crude circled A is scrawled across their gear.  
 ~
 civilian~
 ~
@@ -1188,8 +1186,8 @@ D 41 75
 
 #104
 handbunker bunker~
-`DHand Bunker`x~
-A Hand Bunker
+`DIlluminati Bunker`x~
+An Illuminati Bunker
 ~
 ~
 civilian~

@@ -4050,14 +4050,6 @@ extern "C" {
   _DOFUN(do_basement) {
     ROOM_INDEX_DATA *newroom;
 
-    if (ch->pcdata->ci_editing == 18) {
-      ch->pcdata->ci_absorb = 1;
-      ch->pcdata->ci_discipline = number_range(ENCOUNTER_ONE, ENCOUNTER_MAX);
-      printf_to_char(ch, "New Base encounter: %s\n\r", encounter_prompt(ch, ch->pcdata->ci_discipline));
-      return;
-    }
-
-
     if (ch->position < 7) {
       send_to_char("Stand up first.\n\r", ch);
       return;

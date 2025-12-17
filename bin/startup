@@ -1,13 +1,23 @@
 #!/bin/sh -f
 
+set -eu
+
 # Enable core dumps
 ulimit -c unlimited
 
 # Set the port number
-port=3000
+port=${1:-2350}
 
-# Change to area directory
-cd ../area
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+HAVEN_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+AREA_DIR="$HAVEN_ROOT/area"
+LOG_DIR="$HAVEN_ROOT/log"
+HAVEN_BIN="$HAVEN_ROOT/src/haven"
+
+mkdir -p "$LOG_DIR"
+
+# Change to area directory (boot expects this)
+cd "$AREA_DIR"
 
 if [ -r shutdown.txt ]; then
   rm -f shutdown.txt
@@ -16,7 +26,7 @@ fi
 while true; do
   index=1000
   while true; do
-    logfile=../log/$index.log
+    logfile="$LOG_DIR/$index.log"
     if [ -r "$logfile" ]; then
       index=$((index+1))
     else
@@ -26,12 +36,13 @@ while true; do
 
   # Enable core dumps and run the game
   ulimit -c unlimited
-  ../src/haven "$port" >"$logfile" 2>&1
+  "$HAVEN_BIN" "$port" >"$logfile" 2>&1
 
   # Check for the core file and move it if it exists
-  if [ -r ../area/core* ]; then
-    mv ../area/core* ../log/core.$(date +%s)
-  fi
+  for corefile in "$AREA_DIR"/core*; do
+    [ -e "$corefile" ] || break
+    mv "$corefile" "$LOG_DIR/core.$(date +%s)"
+  done
 
   if [ -r shutdown.txt ]; then
     rm -f shutdown.txt

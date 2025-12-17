@@ -711,12 +711,7 @@ extern "C" {
       send_to_char("You cannot use that channel.\n\r", ch);
       return;
     }
-    // Added some checks so that immortals don't need donation credit to see
-    // Legends and OOC - Discordance
-    if ((bit == COMM_NOOOC && available_donated(ch) < 1000 && (!IS_IMMORTAL(ch)))) {
-      send_to_char("You cannot use that channel.\n\r", ch);
-      return;
-    }
+    // Legends - Discordance
     if ((bit == COMM_NOLEGEND && available_donated(ch) < 3000 && (!IS_IMMORTAL(ch)))) {
       send_to_char("You cannot use that channel.\n\r", ch);
       return;
@@ -842,9 +837,6 @@ extern "C" {
           continue;
 
           if (bit == COMM_NOSTALK && !IS_IMMORTAL(victim) && !IS_FLAG(victim->act, PLR_GM))
-          continue;
-
-          if (bit == COMM_NOOOC && available_donated(victim) < 1000)
           continue;
 
           if (bit == COMM_NOLEGEND && available_donated(victim) < 3000)
@@ -8941,8 +8933,8 @@ extern "C" {
 
   OBJ_DATA *find_phone(CHAR_DATA *ch, int number) {
     OBJ_DATA *phone;
-    if(ch == NULL || number == NULL)
-    return NULL;
+    if (ch == NULL || number <= 0)
+      return NULL;
 
     if (is_animal(ch) && get_animal_genus(ch, ANIMAL_ACTIVE) != GENUS_HYBRID && (ch->shape != SHAPE_WOLF || get_skill(ch, SKILL_HYBRIDSHIFTING) < 1))
     return NULL;
@@ -10234,12 +10226,6 @@ extern "C" {
 
     sprintf(buf, "\n\n\nCharacter History:\n%s\n\r", victim->pcdata->history);
     strcat(string, buf);
-
-    if(strlen(victim->pcdata->doom_desc) > 3)
-    {
-      sprintf(buf, "\n\n\nProphecy:\n%s\n\r", victim->pcdata->doom_desc);
-      strcat(string, buf);
-    }
 
     for (int i = 0; i < 10; i++) {
       switch (victim->pcdata->relationship_type[i]) {
@@ -12918,6 +12904,10 @@ extern "C" {
       rpgain = rpgain * 3 / 4;
 
       gain_rpexp(ch, rpgain);
+      if (!is_gm(ch) && !(is_dreaming(ch) && running_calendar(ch))) {
+        int rpkarmagain = UMAX(1, rpgain / 10);
+        give_karma(ch, rpkarmagain, KARMA_RP);
+      }
 
       if (ch->fcore != 0) {
         if (has_other_symbol(ch)) {

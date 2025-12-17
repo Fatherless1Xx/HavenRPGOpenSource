@@ -2258,7 +2258,6 @@ std::string encounter_prompt	args( (CHAR_DATA *ch, int type) );
 int giftobjval			args( (OBJ_DATA *obj) );
 void init_char			args( (CHAR_DATA *ch) );
 void add_encounter		args( (int etype, int ebase, char * text, int clan_id) );
-void set_doom			args( ( CHAR_DATA *ch) );
 int remote_power_level	args( (CHAR_DATA *ch, CHAR_DATA *victim) );
 bool norp_match			args( (CHAR_DATA *ch, CHAR_DATA *victim) );
 bool are_allies args( (CHAR_DATA *ch, CHAR_DATA *victim) );
