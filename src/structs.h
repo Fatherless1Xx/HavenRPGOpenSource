@@ -1001,6 +1001,8 @@ int     dream_karma;
       int     pkarma;
       int     karmabank;
       int     karmaearned;
+      int     weekly_rp_karma;
+      int     weekly_rp_karma_week;
       int     donated;
       int                 renames;
       int                 colours;
@@ -3508,10 +3510,6 @@ bool	crowded_room;
       int     dream_attack_cool;
       int     last_develop_type;
       int     last_develop_time;
-      int     doom_date;
-      int     doom_countdown;
-      char *  doom_desc;
-      char *  doom_custom;
       int     previous_focus_vnum[25];
       int     previous_focus_level[25];
       int     form_change_date;
@@ -4827,5 +4825,3 @@ bool	crowded_room;
   #endif
   
 #endif
-
-

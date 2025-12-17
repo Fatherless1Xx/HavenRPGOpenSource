@@ -104,8 +104,8 @@ extern "C" {
   bool check_antag_win args((int number));
   int phil_amount	args( (FACTION_TYPE *fac, LOCATION_TYPE *loc) );
 
-  char *const hand_divisions[] = {"None", "The Peacekeeping Hand", "The Shadow Hand", "The Whispering Hand", "None", "None"};
-  char *const order_divisions[] = {"None", "Order ShieldBearers", "Order SwordBearers", "Order Librarians", "None", "None"};
+  char *const hand_divisions[] = {"None", "The Peacekeeping Illuminati", "The Shadow Illuminati", "The Whispering Illuminati", "None", "None"};
+  char *const order_divisions[] = {"None", "Anarchist Rioters", "Anarchist Raiders", "Anarchist Firebrands", "None", "None"};
   char *const temple_divisions[] = {"None", "Temple Strike Force", "Temple Intelligence", "Temple Demolishers", "None", "None"};
 
   const char *terrain_names[11] = {"Forest",  "Field",     "Desert",    "Town", "City",    "Mountains", "Warehouse", "Caves", "Village", "Tundra",    "Lake"};
@@ -1236,7 +1236,7 @@ extern "C" {
   }
 
   const char *fac_names[4] = {
-    "", "The Hand", "The Order", "The Temple", };
+    "", "The Illuminati", "The Anarchists", "The Temple", };
 
   int rank_requirement(int rank) {
     rank++;
@@ -1561,6 +1561,10 @@ extern "C" {
     FACTION_TYPE *fac = clan_lookup(vnum);
     if (fac->antagonist != 0)
     return;
+    if (vnum == FACTION_TEMPLE) {
+      send_to_char("The Temple cannot be joined.\n\r", ch);
+      return;
+    }
 
     int i;
 
@@ -2018,7 +2022,7 @@ extern "C" {
               member->esteem_sect = fac->member_esteem[i];
               else if (member->fcult == fac->vnum)
               member->esteem_cult = fac->member_esteem[i];
-              sprintf(buf, "CLAN DEMOTION COMBAT HAND %s:%s.", fac->name, member->name);
+              sprintf(buf, "CLAN DEMOTION COMBAT ILLUMINATI %s:%s.", fac->name, member->name);
               log_string(buf);
             }
             if (fac->vnum == FACTION_ORDER && prof_focus(member) > 1 && prof_focus(member) > arcane_focus(member) && prof_focus(member) > combat_focus(member) && fac->member_esteem[i] >
@@ -2767,6 +2771,11 @@ member->esteem = fac->member_esteem[i];
         printf_to_char(ch, "%s join (group name).\n\r", ctype);
         return;
       }
+      if(clan_vnum_by_name(argument) == FACTION_TEMPLE)
+      {
+        send_to_char("The Temple was wiped out hundreds of years ago and cannot be joined.\n\r", ch);
+        return;
+      }
 
 
       if (ch->faction == 0 && ch->pcdata->lastidentity != 0 && ch->played / 3600 < 10) {
@@ -2815,6 +2824,7 @@ return;
         }
       }
       join_to_clan(ch, clan_vnum_by_name(argument));
+      if (ch->faction == clan_vnum_by_name(argument))
       printf_to_char(ch, "You join %s.\n\r", clan_lookup(clan_vnum_by_name(argument))->name);
 
 
@@ -3119,7 +3129,7 @@ return;
         return;
       }
 
-      if (!str_cmp(arg2, "Hand")) {
+      if (!str_cmp(arg2, "Illuminati")) {
         fac->parent = FACTION_HAND;
       }
     }
@@ -3209,10 +3219,10 @@ return;
         return;
       }
 
-      if (!str_cmp(arg2, "Hand")) {
+      if (!str_cmp(arg2, "Illuminati") || !str_cmp(arg2, "Hand")) {
         fac->parent = FACTION_HAND;
       }
-      else if (!str_cmp(arg2, "Order")) {
+      else if (!str_cmp(arg2, "Anarchists") || !str_cmp(arg2, "Anarchist") || !str_cmp(arg2, "Order")) {
         fac->parent = FACTION_ORDER;
       }
       else if (!str_cmp(arg2, "Temple")) {
@@ -3295,7 +3305,7 @@ return;
     }
     if (!str_cmp(arg, "list")) {
 
-      send_to_char("`WThe Order\n\r`DThe Hand\n\r`gThe Temple`x\n\n\r", ch);
+      send_to_char("`WThe Anarchists\n\r`DThe Illuminati\n\r`gThe Temple`x\n\n\r", ch);
 
       send_to_char("`044  Sects`x\n\r", ch);
 
@@ -3445,7 +3455,10 @@ return;
           printf_to_char(ch, "This %s can be joined by alts.\n\r", ctype);
           else
           printf_to_char(ch, "This %s cannot be joined by alts.\n\r", ctype);
-          if (disp->closed == 0)
+          if (disp->vnum == FACTION_TEMPLE) {
+            printf_to_char(ch, "This %s is defunct and cannot be joined.\n\r", ctype);
+          }
+          else if (disp->closed == 0)
           printf_to_char(
           ch, "This %s is open to being joined with %s join.\n\r", ctype, ctype);
           else
@@ -5476,23 +5489,28 @@ taken by anyone who obtains high\nenough standing, it cannot fall below
         send_to_char("You're not trusted with that yet.\n\r", ch);
         return;
       }
-      if (!str_cmp(argument, "Hand")) {
+      const char *parent_name = "None";
+      if (!str_cmp(argument, "Illuminati") || !str_cmp(argument, "Hand")) {
         fac->parent = FACTION_HAND;
+        parent_name = "Illuminati";
       }
-      else if (!str_cmp(argument, "Order")) {
+      else if (!str_cmp(argument, "Anarchists") || !str_cmp(argument, "Anarchist") || !str_cmp(argument, "Order")) {
         fac->parent = FACTION_ORDER;
+        parent_name = "The Anarchists";
       }
       else if (!str_cmp(argument, "Temple")) {
         fac->parent = FACTION_TEMPLE;
+        parent_name = "The Temple";
       }
       else if (!str_cmp(argument, "None")) {
         fac->parent = 0;
+        parent_name = "None";
       }
       else {
-        send_to_char("Syntax: Faction ally Hand/Order/Temple/None\n\r", ch);
+        send_to_char("Syntax: Faction ally Illuminati/Anarchists/Temple/None\n\r", ch);
         return;
       }
-      printf_to_char(ch, "Your group allies with the %s\n\r", argument);
+      printf_to_char(ch, "Your group allies with %s.\n\r", parent_name);
     }
     else if (!str_cmp(arg, "ranktrust")) {
       if (!has_trust(ch, TRUST_PROMOTIONS, fac->vnum)) {
@@ -6404,6 +6422,10 @@ taken by anyone who obtains high\nenough standing, it cannot fall below
         send_to_char("You're not trusted with that yet.\n\r", ch);
         return;
       }
+      if (fac->vnum == FACTION_TEMPLE) {
+        send_to_char("The Temple was wiped out hundreds of years ago and cannot be joined.\n\r", ch);
+        return;
+      }
       CHAR_DATA *victim = get_char_room(ch, NULL, argument);
 
       if (victim == NULL || !can_join_faction(victim, fac->vnum, TRUE)) {
@@ -6432,8 +6454,10 @@ taken by anyone who obtains high\nenough standing, it cannot fall below
       sprintf(lbuf, "%s recruits %s.", ch->name, victim->name);
       send_log(fac->vnum, lbuf);
       join_to_clan(victim, fac->vnum);
-      printf_to_char(ch, "You join them to your %s!\n\r'", ctype);
-      printf_to_char(victim, "You join %s.\n\r", fac->name);
+      if (victim->faction == fac->vnum) {
+        printf_to_char(ch, "You join them to your %s!\n\r'", ctype);
+        printf_to_char(victim, "You join %s.\n\r", fac->name);
+      }
 
     }
     else if (!str_cmp(arg, "leave")) {
@@ -8910,7 +8934,7 @@ library.\n\r", ch); return;
     if (faction == FACTION_HAND) {
       mob->faction = FACTION_HAND;
       free_string(mob->protecting);
-      mob->protecting = str_dup("The Hand");
+      mob->protecting = str_dup("The Illuminati");
     }
     else if (faction == FACTION_TEMPLE) {
       mob->faction = FACTION_TEMPLE;
@@ -8920,7 +8944,7 @@ library.\n\r", ch); return;
     else if (faction == FACTION_ORDER) {
       mob->faction = FACTION_ORDER;
       free_string(mob->protecting);
-      mob->protecting = str_dup("The Order");
+      mob->protecting = str_dup("The Anarchists");
     }
     mob->in_fight = TRUE;
     if (activeoperation != NULL)
@@ -8990,7 +9014,7 @@ if(faction == FACTION_HAND)
 {
 mob->faction = FACTION_HAND;
 free_string(mob->protecting);
-mob->protecting = str_dup("The Hand");
+mob->protecting = str_dup("The Illuminati");
 }
 else if(faction == FACTION_TEMPLE)
 {
@@ -9002,7 +9026,7 @@ else if(faction == FACTION_ORDER)
 {
 mob->faction = FACTION_ORDER;
 free_string(mob->protecting);
-mob->protecting = str_dup("The Order");
+mob->protecting = str_dup("The Anarchists");
 }
 */
   }

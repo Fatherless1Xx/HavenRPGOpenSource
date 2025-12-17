@@ -214,23 +214,6 @@ Blessings generally last for 24 hours.
 ~
 End
 
-Keyword Doom~
-SeeAlso ~
-Level 0
-Online 0
-Type 0
-Text If you see a date next to 'Dies' in your score sheet that means your character has been prophesied to die
-on that date. You can avoid this fate either by rerolling or otherwise finishing your character's story
-before then. Alternatively your character can go into hiding to change their fate and avoid their doom.
-To do this you will have to not log that character into the game for one month from the date of their
-doom. You can stasis the character, reroll them, make a guest, play an alt or just take a break from the
-game. Regardless of what you choose if and when you return to the game you will have successfully have
-avoided that doom, but that doesn't mean a new one one be waiting for you.
-
-Higher tier characters and those with more invested karma have shorter spans until their doom.
-~
-End
-
 Keyword Eidolon Commands~
 SeeAlso Eidolon Lore, Storyrunner commands
 ~
@@ -271,9 +254,6 @@ by characters in the dark.
 
 `cMake Patrol`x
 -Used by a member of an Eidolon's cult to enter an editor to set up a custom patrol.
-
-`cMake Encounter`x
--Used by a member of an Eidolon's cult to enter an editor to set up a custom encounter.
 
 `gAlso see help Storyrunner commands`x
 ~
@@ -1279,63 +1259,63 @@ SeeAlso ~
 Level 0
 Online 0
 Type 0
-Text The Temple has three subfactions: the Temple Strike Force, who are the Temple's military and the most elite military group in the world; the Temple Demolishers, an even more destructive group consisting of chipped supernaturals and experimental weapons; and Temple Intelligence, who handle technological development and espionage.
+Text The Temple cannot be joined. It was wiped out hundreds of years ago, and what remains are bunkers, stolen archives, and occasional copycats. The divisions below are historical archetypes used for stories.
  
 `c[`WTemple Strike Force`c]`g:`x
-  The most elite military group in the world, armed with weaponry most countries have never even heard of and occasionally even featuring a rare supernatural member, the Temple's strike team is feared by supernaturals the world over for their ruthless efficiency.
-   `cCommon Allies`g :`x Other Temple groups, the Keepers, FBI
-   `cCommon Enemies`g:`x Order/Hand, the Vampire Court of New York, the Redwood Pack, the Coven, the Chosen, the Syndicate
-   `yPrefers`g       :`x Higher ranked Temple members
-   `yTypical Tasks`g :`x The elimination or capture of the Temple's enemies, sabotage, assassination.
+  In its final centuries, the Temple's Strike Force were elite hunter cadres armed with cutting-edge doctrine and ruthless efficiency.
+   `cCommon Allies`g :`x None (defunct)
+   `cCommon Enemies`g:`x Historically: Illuminati/Anarchists
+   `yPrefers`g       :`x N/A (defunct)
+   `yTypical Tasks`g :`x Recovering bunkers, relics, and suppressed research
 
  
 `c[`WTemple Demolishers`c]`g:`x
-  If the strike team is the Temple's surgical sledgehammer, the Demolishers are their wrecking ball. An almost experimental group containing most of the Temple's supernaturals as well as those wielding experimental weaponry, the Demolishers are deployed in situations where bystander casualties or stealth are not a concern; wherever they go they'll leave only rubble behind.
-   `cCommon Allies`g :`x Other Temple groups, the Keepers
-   `cCommon Enemies`g:`x Order/Hand, the Vampire Court of New York, the Redwood Pack, the Coven, the Chosen, the Syndicate
-   `yPrefers`g       :`x Higher ranked Temple members
-   `yTypical Tasks`g :`x Blowing shit up, killing the Temple's enemies via blowing shit up
+  The Demolishers were the Temple's last-resort shock troops and experimental weapon programs, deployed when stealth and collateral damage stopped mattering.
+   `cCommon Allies`g :`x None (defunct)
+   `cCommon Enemies`g:`x Historically: Illuminati/Anarchists
+   `yPrefers`g       :`x N/A (defunct)
+   `yTypical Tasks`g :`x Breaching ruins, burning evidence, desperate stand-offs
 
  
 `c[`WTemple Intelligence`c]`g:`x
-  The eyes, ears, and brain of the Temple. Consisting largely of ex-intelligence agents and military intelligence officers, Temple intelligence agents are the reason the Temple knows so much and always has the latest in weaponry and anti-supernatural technology.
-   `cCommon Allies`g :`x Other Temple groups, the Keepers, CIA
-   `cCommon Enemies`g:`x Order/Hand, the Vampire Court of New York, the Redwood Pack, the Coven, the Chosen, the Syndicate
-   `yPrefers`g       :`x Higher ranked Temple members
-   `yTypical Tasks`g :`x Research, infiltration, espionage, spying
+  The eyes, ears, and brain of the old Temple: informants, surveillance cells, and infiltration teams that weaponized bureaucracy and fear.
+   `cCommon Allies`g :`x None (defunct)
+   `cCommon Enemies`g:`x Historically: Illuminati/Anarchists
+   `yPrefers`g       :`x N/A (defunct)
+   `yTypical Tasks`g :`x Tracking bunkers, decoding dossiers, hunting copycats
  
 `c[`WLast edited May 17, 2022`c]`x
 ~
 End
 
-Keyword hand subfactions~
+Keyword Illuminati Subfactions Hand Subfactions~
 SeeAlso ~
 Level 0
 Online 0
 Type 0
-Text The Hand has three subfactions: the Peacekeeping Hand, who form the bulk of the Hand's brutal, largely-supernatural military strength; the Whispering Hand, who are the Hand's covert operatives; and the Whispering Hand, who deal with politicians and the public in general.
+Text The Illuminati has three subfactions: the Peacekeeping Illuminati, who form the bulk of the Illuminati's brutal, largely-supernatural military strength; the Shadow Illuminati, who are the Illuminati's covert operatives; and the Whispering Illuminati, who deal with politicians and the public in general.
  
-`c[`WPeacekeeping Hand`c]`g:`x
-  The Peacekeepers are the Hand's soldiers, guards and police, called upon whenever martial might is required. They are structured similarly to a Roman legion and are the division in which humans are the least likely to be found. The Hand doesn't rely on martial force as much as the other factions, but when they do their policy is to ensure their opponent never wants to fight them again - as such the Peacekeepers usually display extreme brutality when deployed in battle.
-   `cCommon Allies`g :`x Other Hand groups, the Vampire Court of New York
-   `cCommon Enemies`g:`x Order/Temple/Keepers, occasionally other Hand groups
-   `yPrefers`g       :`x Higher ranked Hand members, supernaturals
-   `yTypical Tasks`g :`x Protecting important members of the Hand, protecting important locations or objects of the Hand, investigating supernatural crime, destroying or hurting the Hand's enemies
+`c[`WPeacekeeping Illuminati`c]`g:`x
+  The Peacekeepers are the Illuminati's soldiers, guards and police, called upon whenever martial might is required. They are structured similarly to a Roman legion and are the division in which humans are the least likely to be found. The Illuminati doesn't rely on martial force as much as the other factions, but when they do their policy is to ensure their opponent never wants to fight them again - as such the Peacekeepers usually display extreme brutality when deployed in battle.
+   `cCommon Allies`g :`x Other Illuminati groups, the Vampire Court of New York
+   `cCommon Enemies`g:`x Anarchists/Keepers/Temple remnants, occasionally other Illuminati groups
+   `yPrefers`g       :`x Higher ranked Illuminati members, supernaturals
+   `yTypical Tasks`g :`x Protecting important members of the Illuminati, protecting important locations or objects of the Illuminati, investigating supernatural crime, destroying or hurting the Illuminati's enemies
 
  
-`c[`WShadow Hand`c]`g:`x
-  The Shadows are the Hand's covert operatives; they handle assassinations, espionage, spying, and researching as well as R&D for technological and magical creations. Their exact numbers aren't well known, and they pride themselves on being able to reach anyone anywhere and knowing every secret that's worth knowing. An extremely technologically-advanced group, the Shadows are believed to have the world's most powerful supercomputer in one of their hidden facilities.
-   `cCommon Allies`g :`x Other Hand groups, criminal subfactions, CIA
-   `cCommon Enemies`g:`x FBI, Order/Temple/Keepers
-   `yPrefers`g       :`x Higher ranked Hand members
+`c[`WShadow Illuminati`c]`g:`x
+  The Shadows are the Illuminati's covert operatives; they handle assassinations, espionage, spying, and researching as well as R&D for technological and magical creations. Their exact numbers aren't well known, and they pride themselves on being able to reach anyone anywhere and knowing every secret that's worth knowing. An extremely technologically-advanced group, the Shadows are believed to have the world's most powerful supercomputer in one of their hidden facilities.
+   `cCommon Allies`g :`x Other Illuminati groups, criminal subfactions, CIA
+   `cCommon Enemies`g:`x FBI, Anarchists/Keepers/Temple remnants
+   `yPrefers`g       :`x Higher ranked Illuminati members
    `yTypical Tasks`g :`x Spying on a target, acquiring intelligence, planting evidence, assassination, theft, research, weapons development
 
  
-`c[`WWhispering Hand`c]`g:`x
-  The Whisperers are the Hand's public face; they are its diplomats, PR agents, advertising executives, and politicians. They are dedicated to influencing the world at large to serve the agenda of the Hand, as well as handling relations with other groups. Those groups might be supernatural ones, or natural ones relating to the Hand through one of their many corporate fronts, the largest and most well-known of which is Coretech Industries.
-   `cCommon Allies`g :`x Other Hand groups, FBI, Rushell Industries, Tyrell Corp
-   `cCommon Enemies`g:`x Order/Temple/Keepers, the Aquarian Guard, the New World Movement
-   `yPrefers`g       :`x Higher ranked Hand members
+`c[`WWhispering Illuminati`c]`g:`x
+  The Whisperers are the Illuminati's public face; they are its diplomats, PR agents, advertising executives, and politicians. They are dedicated to influencing the world at large to serve the agenda of the Illuminati, as well as handling relations with other groups. Those groups might be supernatural ones, or natural ones relating to the Illuminati through one of their many corporate fronts, the largest and most well-known of which is Coretech Industries.
+   `cCommon Allies`g :`x Other Illuminati groups, FBI, Rushell Industries, Tyrell Corp
+   `cCommon Enemies`g:`x Anarchists/Keepers/Temple remnants, the Aquarian Guard, the New World Movement
+   `yPrefers`g       :`x Higher ranked Illuminati members
    `yTypical Tasks`g :`x Influencing elections, influencing politicians, influencing business, hosting parties, charity work, acquiring business, making a profit, diplomacy
  
 `c[`WLast edited November 20, 2022`c]`x
@@ -2613,35 +2593,35 @@ Text Powers are one of the things that set supernatural bloodlines apart from me
 ~
 End
 
-Keyword Order Subfactions~
+Keyword Anarchists Subfactions Order Subfactions~
 SeeAlso ~
 Level 0
 Online 0
 Type 0
-Text The Order has three subfactions: the Shieldbearers, who form the bulk of the Order's military strength; the Swordbearers, who act as supernatural peacekeepers; and the Librarians, who often handle investigations.
+Text The Anarchists have three loose crews: the Rioters, the Raiders, and the Firebrands.
  
-`c[`WOrder Shieldbearers`c]`g:`x
-  The largest military group within the Order, the Shieldbearers are responsible for the protection of others. They may protect humans from supernatural threats, or supernaturals from humans or other supers. Sometimes their work is overt, other times less so. It's common for many important humans to have covert Shieldbearers placed in their staff to combat any attempts to kill or manipulate them with supernatural means.
-   `cCommon Allies`g :`x Other Order groups
-   `cCommon Enemies`g:`x Hand/Temple
-   `yPrefers`g       :`x Higher ranked Order members
-   `yTypical Tasks`g :`x Protecting people, items or locations from possible or expectant threats
+`c[`WAnarchist Rioters`c]`g:`x
+  The Anarchists' shock troops: the ones who turn arguments into brawls and brawls into riots.
+   `cCommon Allies`g :`x Other Anarchist crews
+   `cCommon Enemies`g:`x Illuminati/Keepers
+   `yPrefers`g       :`x Supernaturals, fighters
+   `yTypical Tasks`g :`x Starting fights, intimidation, street violence
 
  
-`c[`WOrder Swordbearers`c]`g:`x
-  The right arm of the Order, less numerous than the Shieldbearers in accordance with the Order's more reactive philosophy the Swordbearers are none the less powerful and well trained combatants, ready at a moment's notice to destroy the Order's enemies.
-   `cCommon Allies`g :`x Other Order groups
-   `cCommon Enemies`g:`x Hand/Temple
-   `yPrefers`g       :`x Higher ranked Order members
-   `yTypical Tasks`g :`x Destroying or capturing criminal supernaturals, destroying the Order's enemies
+`c[`WAnarchist Raiders`c]`g:`x
+  Mobile crews: scouts, thieves, and skirmishers who hit fast, hit hard, and vanish before anyone can organize.
+   `cCommon Allies`g :`x Other Anarchist crews
+   `cCommon Enemies`g:`x Illuminati/Keepers
+   `yPrefers`g       :`x Opportunists, thrill-seekers
+   `yTypical Tasks`g :`x Raids, theft, ambushes, intimidation
 
  
-`c[`WOrder Librarians`c]`g:`x
-  The investigative branch of the Order, these members are less focused on conflict and more on discovering the true nature of the supernatural world.
-   `cCommon Allies`g :`x Other Order groups, the Hidden Council
-   `cCommon Enemies`g:`x Hand/Temple, the Coven, the Redwood Pack
-   `yPrefers`g       :`x Higher ranked Order members
-   `yTypical Tasks`g :`x Seeking artifacts and tomes, going on scouting missions offworld, doing research
+`c[`WAnarchist Firebrands`c]`g:`x
+  Instigators and social predators who spread chaos, sabotage authority, and recruit by making the world feel smaller and more dangerous.
+   `cCommon Allies`g :`x Other Anarchist crews
+   `cCommon Enemies`g:`x Illuminati/Keepers, Temple remnants
+   `yPrefers`g       :`x Social sharks, recruiters
+   `yTypical Tasks`g :`x Sabotage, recruitment, escalation, provocation
  
 `c[`WLast edited May 17, 2022`c]`x
 ~
@@ -2699,11 +2679,11 @@ Text Conflicting loyalties is part of the world of Haven by design. There's litt
 
 These conflicting loyalties can come from many places, your character's friendships, relationships, or family might conflict with their organization or they might be part of two organizations which often don't see eye to eye or even are overt enemies.
 
-There will never be a one-size fits all solution to these conflicts as every one is likely to be unique. It could be a generally virtuous individual joining a corrupt but pro-environment society because of their staunch environmentalism and willingness to overlook the bad parts of that group because of it, it could be an individual sentenced in an Order trial to serve the Order for a year even though they'd rather not, or someone blackmailed into working for a corrupt group.
+There will never be a one-size fits all solution to these conflicts as every one is likely to be unique. It could be a generally virtuous individual joining a corrupt but pro-environment society because of their staunch environmentalism and willingness to overlook the bad parts of that group because of it, it could be an individual compelled by an Anarchist crew to serve them for a year even though they'd rather not, or someone blackmailed into working for a corrupt group.
 
 Every situation is going to be different as to why the character has a conflicting loyalty and what it means for how trustworthy or suspicious they are likely to be considered or treated.
 
-Characters with conflicting loyalties are obligated to find ways to RP them in line with good RP practices. It would be nothing but irritation for a corrupt individual to join the Order out of a temporary oath only to do nothing useful for the Order and complain constantly on comms about hating them for example. Similarly those interacting with characters with conflicting loyalties are obligated to find ways to RP with them in line with good RP practices. It would be very appropriate to treat an individual only working for your organization because of an oath or blackmail or a particular shared goal with a great deal more suspicion for instance, it would be overtly terrible to ban them from society activities or lock them out of RP or try and force them to give up the source of the conflict however.
+Characters with conflicting loyalties are obligated to find ways to RP them in line with good RP practices. It would be nothing but irritation for a corrupt individual to join the Anarchists out of a temporary oath only to do nothing useful for the Anarchists and complain constantly on comms about hating them for example. Similarly those interacting with characters with conflicting loyalties are obligated to find ways to RP with them in line with good RP practices. It would be very appropriate to treat an individual only working for your organization because of an oath or blackmail or a particular shared goal with a great deal more suspicion for instance, it would be overtly terrible to ban them from society activities or lock them out of RP or try and force them to give up the source of the conflict however.
 ~
 End
 
@@ -2846,7 +2826,7 @@ SeeAlso Founding Family Applications
 Level 0
 Online 0
 Type 0
-Text `DThe Arkwrights`x: The Arkwright family typically finds themselves in medical professions, but other Arkwrights have the misfortune of finding themselves victims of Haven's nightlife. `DJames Arkwright`x is actually one of the original founders of the town, but tends to be off politicking for the Hand throughout the US. `W(`xRather than doing scenes with James, Arkwrights, please assume he visits semi-regularly to torture you`W)`x
+Text `DThe Arkwrights`x: The Arkwright family typically finds themselves in medical professions, but other Arkwrights have the misfortune of finding themselves victims of Haven's nightlife. `DJames Arkwright`x is actually one of the original founders of the town, but tends to be off politicking for the Illuminati throughout the US. `W(`xRather than doing scenes with James, Arkwrights, please assume he visits semi-regularly to torture you`W)`x
 
 `DTheme`x: James Arkwright occasionally visits his family members, and tends to abuse them in many horrific ways. The Arkwrights tend to be wistful and broken. For humans, Sensitive is almost a must have stat.
 
@@ -5886,7 +5866,7 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: An angelborn support group, while of limited power the group works to improve the lives of angelborn everywhere, who have a tendency to end up in bad situations.
-`DCommon Allies`w: The Order, The Beastmasters.
+`DCommon Allies`w: The Anarchists, The Beastmasters.
 `DCommon Enemies`w: The Syndicate.
 `GPrefers`w: Angelborn.
 `gTypical Tasks`w: Saving angelborn.
@@ -5914,7 +5894,7 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: Wildings who live in the Fae, with their own set of problems and issues to deal with.
-`DCommon Allies`w: The Order, The Lost.
+`DCommon Allies`w: The Anarchists, The Lost.
 `DCommon Enemies`w: None.
 `GPrefers`w: Faeborn.
 `gTypical Tasks`w: Dealing with monsters and other fae threats.
@@ -5936,7 +5916,7 @@ highly stealth oriented assassins who use modern weapons as well as biomancy to
 augment their strength, speed and durability, but are otherwise human. Those
 who anger them and are caught by their agents are never heard of again.
 `DCommon Allies`w: Chinese Intelligence
-`DCommon Enemies`w: The Hand, The Order, The Temple.
+`DCommon Enemies`w: The Illuminati, The Anarchists, Temple remnants.
 `GPrefers`w: Asians
 `gTypical Tasks`w: None
 ~
@@ -5950,7 +5930,7 @@ Online 0
 Type 0
 Text `gOverview`w: A group of all female magical practitioners that formed during a time in which most knowledge, including magical knowledge was largely forbidden to women. While all three circles now accept female members the Coven continues as an independent organization. Their attitudes towards magical ethics are as varied as their attitudes towards the circles themselves although they have always traditionally been more closely allied with the black and red circles than the white. 
 `DCommon Allies`w: The Red Circle, The Black Circle, The White Circle
-`DCommon Enemies`w: The Temple, The Order, The Witch Hunters
+`DCommon Enemies`w: Temple remnants, The Anarchists, The Witch Hunters
 `GPrefers`w: Women, magical practitioners
 `gTypical Tasks`w: Research, experimentation, obtaining artifacts and relics, recruitment.
 ~
@@ -5991,8 +5971,8 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: A council of magical practitioners devoted to the pursuit of individual power above all else. They tend to perceive non-magically adept supernaturals as only slightly better than humans and judge everyone by their arcane skill and knowledge. They frequently traffic with demons and other higher powers and are famed for the dark magical experiments they conduct on humans and animals alike.
-`DCommon Allies`w: The Hand, The Red Circle, The Syndicate
-`DCommon Enemies`w: The Temple, The White Circle, The Order
+`DCommon Allies`w: The Illuminati, The Red Circle, The Syndicate
+`DCommon Enemies`w: Temple remnants, The White Circle, The Anarchists
 `GPrefers`w: Magical practitioners, ruthless individuals.
 `gTypical Tasks`w: Experimentation, Research, obtaining artifacts and relics, arranging deals, recruitment.
 ~
@@ -6005,7 +5985,7 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: A support group for those who've been fleshformed at some point in their life by Fae, Gods or Demons and now have to live with their altered forms.
-`DCommon Allies`w: The Order, Redwood Pack, The Lost.
+`DCommon Allies`w: The Anarchists, Redwood Pack, The Lost.
 `DCommon Enemies`w: The Circus, The Chosen, The Gamemasters, The God houses.
 `GPrefers`w: Supernaturals, homeless contacts.
 `gTypical Tasks`w: Protecting their members, rescuing them, settling them.
@@ -6062,7 +6042,7 @@ Online 0
 Type 0
 Text `gOverview`w: The Witch Hunters are a loose assemblage of people dedicated to the elimination of supernatural threats. Their central leadership and history are fairly religious but today anyone who wants to go after dangerous supernaturals and black magic can be endorsed as a member and given assistance with weapons and training to do so and most of their members are those who've previously suffered at the hands of supernatural forces. While they target all types of dangerous supernaturals they have a strong historical enmity to black magic in particular and have a fierce rivalry with the Coven owing to a long history of grievances from both sides.
 `DCommon Allies`w: The Temple, The Hunters
-`DCommon Enemies`w: The Coven, The Black Circle, The Hand
+`DCommon Enemies`w: The Coven, The Black Circle, The Illuminati
 `GPrefers`w: Humans, Religious Individuals, those seeking vengeance
 `gTypical Tasks`w: Identifying, tracking and eliminating supernaturals and magical practitioners
 ~
@@ -6075,30 +6055,30 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: A council of magical practitioners devoted to using their magic to better humanity. They follow a strict code of rules governing legal and illegal use of magic mostly derived from do no harm principles. They spend a lot of time in research, but also in carrying out aid missions.
-`DCommon Allies`w: The Order, The Watchers, The Red Circle
-`DCommon Enemies`w: The Hand, the Black Circle
+`DCommon Allies`w: The Anarchists, The Watchers, The Red Circle
+`DCommon Enemies`w: The Illuminati, the Black Circle
 `GPrefers`w: Magical practitioners, selfless individuals
 `gTypical Tasks`w: Research, aid missions, obtaining artifacts and relics, protection, recruitment
 ~
 End
 
-Keyword Whispering Hand~
-SeeAlso Hand Subfactions, Subfactions, The Hand
+Keyword Whispering Illuminati~
+SeeAlso Illuminati Subfactions, Subfactions, The Illuminati
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The Whisperers are the Hand's public face, they are it's
+Text `gOverview`w: The Whisperers are the Illuminati's public face, they are it's
 diplomats, PR agents, advertising executives, and politicians.  Dedicated to
-influencing the world at large to serve the agenda of the Hand as well as
+influencing the world at large to serve the agenda of the Illuminati as well as
 handling relations with other groups.  Those groups might be supernaturals
-ones, or natural ones relating to the Hand through one of their many
+ones, or natural ones relating to the Illuminati through one of their many
 corporate fronts, the largest and well known of which is Coretech
 Industries.  
-`DCommon Allies`w: Other Hand groups, FBI, Rushell Industries, Tyrell Corp
+`DCommon Allies`w: Other Illuminati groups, FBI, Rushell Industries, Tyrell Corp
 `DCommon Enemies`w: Order/Temple/Keepers, the Aquarian Guard, the New World
 Movement
-`GPrefers`w: Higher Ranked Hand Memebers.  
+`GPrefers`w: Higher Ranked Illuminati Memebers.  
 `gTypical Tasks`w: Influencing elections, influencing politicians, influencing
 business, hosting parties, charity work, acquiring business, making a
 profit, diplomacy.  
@@ -6126,7 +6106,7 @@ Level 0
 Online 0
 Type 0
 Text `gOverview`w: The Empire is an alliance of Vampire courts from many different countries and cities, dedicated to the promotion of vampire rights and powers throughout the world. While theoretically ruled by an emperor or empress the last empress was slain 250 years ago and has yet to be replaced. In theory the vampire empire is one of the most powerful organizations in the supernatural world but in practice they tend to spend most of their time politicking amongst themselves for greater status and power or even for a shot at the coveted Throne of Bones. If something is a large enough threat to the Vampire community overall though for them to come together they can do so with terrifying speed and ferocity.
-`DCommon Allies`w: The Vampire Court of New York, The Hand
+`DCommon Allies`w: The Vampire Court of New York, The Illuminati
 `DCommon Enemies`w: The Temple, The Hunters
 `GPrefers`w: Vampires, virgins
 `gTypical Tasks`w: Obtain new bloodstock, protect members, recruitment, eliminate threats
@@ -6189,22 +6169,22 @@ Text `gOverview`w: A mostly human organization that specializes in the capture a
 ~
 End
 
-Keyword Shadow Hand~
-SeeAlso Hand Subfactions, Subfactions, The Hand
+Keyword Shadow Illuminati~
+SeeAlso Illuminati Subfactions, Subfactions, The Illuminati
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The Shadows are the Hand's covert operatives, they handle
+Text `gOverview`w: The Shadows are the Illuminati's covert operatives, they handle
 assassinations, espionage, spying, researching as well as R&D for
 technological and magical creations.  Their exact numbers aren't well known,
 they pride themselves on being able to reach anyone anywhere and knowing
 every secret that's worth knowing.  An extremely technologically advanced
 group, the shadows are believed to have the world's most powerful
 supercomputer in one of their hidden facilities.  
-`DCommon Allies`w: Other Hand groups, criminal subfactions, CIA.  
+`DCommon Allies`w: Other Illuminati groups, criminal subfactions, CIA.  
 `DCommon Enemies`w: FBI, Order/Temple/Keepers.  
-`GPrefers`w: Higher Ranked Hand Members.  
+`GPrefers`w: Higher Ranked Illuminati Members.  
 `gTypical Tasks`w: Spying on a target, acquiring intelligence, planting
 evidence, assassination, theft, research, weapons development. 
 ~
@@ -6294,25 +6274,25 @@ Text `gOverview`w: A large, nomadic tribe that lives in the wild, the people are
 ~
 End
 
-Keyword Peacekeeping Hand~
-SeeAlso Hand Subfactions, Subfactions, The Hand
+Keyword Peacekeeping Illuminati~
+SeeAlso Illuminati Subfactions, Subfactions, The Illuminati
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The Peacekeepers are the Hand's soldiers, guards and police. 
+Text `gOverview`w: The Peacekeepers are the Illuminati's soldiers, guards and police. 
 Called upon whenever martial might is required.  They are structured
 similarly to a Roman legion and are the division in which humans are the
-least likely to be found.  The Hand doesn't rely on martial force as much as
+least likely to be found.  The Illuminati doesn't rely on martial force as much as
 the other factions, but when they do their police is to ensure their
 opponent never wants to fight them again, as such the peacekeepers usually
 display extreme brutality when deployed in battle.  
-`DCommon Allies`w: Other Hand Groups, The Vampire Court of New York
-`DCommon Enemies`w: Order/Temple/Keepers, occasionally other Hand groups.  
-`GPrefers`w: Higher ranked Hand members, supernaturals.  
-`gTypical Tasks`w: Protecting important members of the Hand, protecting
-important locations or objects of the Hand, investigating supernatural
-crime, destroying or hurting the Hand's enemies.  
+`DCommon Allies`w: Other Illuminati Groups, The Vampire Court of New York
+`DCommon Enemies`w: Order/Temple/Keepers, occasionally other Illuminati groups.  
+`GPrefers`w: Higher ranked Illuminati members, supernaturals.  
+`gTypical Tasks`w: Protecting important members of the Illuminati, protecting
+important locations or objects of the Illuminati, investigating supernatural
+crime, destroying or hurting the Illuminati's enemies.  
 ~
 End
 
@@ -6355,7 +6335,7 @@ countries have never even heard of and even with the odd supernatural member
 the Temple's strike team is feared by supernaturals world over for their
 ruthless efficiency.
 `DCommon Allies`w: Other Temple Groups, The Keepers, FBI.
-`DCommon Enemies`w: Order/Hand, The Vampire Court of New York, The Redwood Pack,
+`DCommon Enemies`w: Order/Illuminati, The Vampire Court of New York, The Redwood Pack,
 The Coven, The Chosen, The Syndicate.
 `GPrefers`w: Higher ranked Temple members.
 `gTypical Tasks`w: The elimination or capture of the Temple's enemies, sabotage,
@@ -6374,7 +6354,7 @@ ex intelligence agents and military intelligence officers, Temple intelligence
 agents are the reason the Temple knows so much and always has the latest in
 weaponry and anti-supernatural technology.
 `DCommon Allies`w: Other Temple Groups, The Keepers, CIA
-`DCommon Enemies`w: Order/Hand, The Vampire Court of New York, The Redwood Pack,
+`DCommon Enemies`w: Order/Illuminati, The Vampire Court of New York, The Redwood Pack,
 The Coven, The Chosen, The Syndicate.
 `GPrefers`w: Higher ranked Temple members.
 `gTypical Tasks`w: Research, infiltration, espionage, spying.
@@ -6393,7 +6373,7 @@ most of the Temple's supernaturals as well as those wielding experimental
 weaponry. The demolishers are deployed in situations where bystander casualties
 or stealth are not a concern. Where they go they'll leave only rubble behind.
 `DCommon Allies`w: Other Temple Groups, The Keepers.
-`DCommon Enemies`w: Order/Hand, The Vampire Court of New York, The Redwood Pack,
+`DCommon Enemies`w: Order/Illuminati, The Vampire Court of New York, The Redwood Pack,
 The Coven, The Chosen, The Syndicate.
 `GPrefers`w: Higher ranked Temple members.
 `gTypical Tasks`w: Blowing shit up, killing the Temple's enemies via blowing shit
@@ -6429,58 +6409,48 @@ Text `gOverview`w: Rockfield bounties is a bounty hunting company based out of B
 ~
 End
 
-Keyword Order Swordbearers~
-SeeAlso Order Subfactions, Subfactions, The Order
+Keyword Anarchist Raiders Order Swordbearers~
+SeeAlso Anarchists Subfactions, Subfactions, The Anarchists
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The right arm of the Order, less numerous than the shieldbearers in
-accordance with the Order's more reactive philosophy the swordbearers are none
-the less powerful and well trained combatants, ready at a moment's notice to
-destroy the Order's enemies.
-`DCommon Allies`w: Other Order Groups.
-`DCommon Enemies`w: Hand/Temple.
-`GPrefers`w: Higher ranked Order members.
-`gTypical Tasks`w: Destroying or capturing criminal supernaturals, destroying
-the order's enemies.
+Text `gOverview`w: Raiders are the Anarchists' mobile crews: scouts, thieves, and skirmishers who
+hit fast, hit hard, and vanish before anyone can organize.
+`DCommon Allies`w: Other Anarchist crews.
+`DCommon Enemies`w: Illuminati/Keepers, Temple remnants.
+`GPrefers`w: Opportunists, thrill-seekers.
+`gTypical Tasks`w: Raids, theft, ambushes, intimidation.
 ~
 End
 
-Keyword Order Shieldbearers~
-SeeAlso Order Subfactions, Subfactions, The Order
+Keyword Anarchist Rioters Order Shieldbearers~
+SeeAlso Anarchists Subfactions, Subfactions, The Anarchists
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The largest military group within the order, the shield bearers are
-responsible for the protection of others. They may protect humans from
-supernatural threats, or supernaturals from humans or other supers. Sometimes
-their work is overt, other times less so. It's common for many important humans
-to have covert shieldbearers placed in their staff to combat any attempts to
-kill or manipulate them with supernatural means.
-`DCommon Allies`w: Other Order Groups.
-`DDCommon Enemies`w: Hand/Temple.
-`GPrefers`w: Higher ranked Order members.
-`gTypical Tasks`w: Protecting people or items or locations from possible or
-expectant threats.
+Text `gOverview`w: Rioters are the Anarchists' shock troops: the ones who turn arguments into brawls
+and brawls into riots.
+`DCommon Allies`w: Other Anarchist crews.
+`DDCommon Enemies`w: Illuminati/Keepers, Temple remnants.
+`GPrefers`w: Supernaturals, fighters.
+`gTypical Tasks`w: Starting fights, intimidation, street violence.
 ~
 End
 
-Keyword Order Librarians~
-SeeAlso Order Subfactions, Subfactions, The Order 
+Keyword Anarchist Firebrands Order Librarians~
+SeeAlso Anarchists Subfactions, Subfactions, The Anarchists 
 ~
 Level 0
 Online 0
 Type 0
-Text `gOverview`w: The investigative branch of the Order, these members are less
-focused on conflict and more on discovering the true nature of the
-supernatural world.
-`DCommon Allies`w: Other Order Groups, The Hidden Council
-`DCommon Enemies`w: Hand/Temple, The Coven, The Redwood Pack
-`GPrefers`w: Higher ranked Order members.
-`gTypical Tasks`w: Seeking artifacts and tomes, going on scouting missions
-offworld, doing research.
+Text `gOverview`w: Firebrands are the Anarchists' instigators and social predators. They spread chaos,
+sabotage authority, and recruit by making the world feel smaller and more dangerous.
+`DCommon Allies`w: Other Anarchist crews.
+`DCommon Enemies`w: Illuminati/Keepers, Temple remnants, The Coven, The Redwood Pack
+`GPrefers`w: Recruiters, social sharks.
+`gTypical Tasks`w: Sabotage, recruitment, escalation, provocation.
 ~
 End
 
@@ -8801,9 +8771,7 @@ A finale plot of any other type will have crisis approval, and will allow for a 
 `cSyntax  `g:`W storyidea finale`x
   Nominate a storyidea being a finale.
  
-`cSyntax  `g:`W encounter storyline `g(`xtitle`g)`x
-`cExample `g:`W encounter storyline A Frolic of Faeborn`x
-  Sets the storyline your current encounter will be part of.
+`cNote    `g:`x Encounters have been removed, so `Wencounter storyline`x is no longer available.
  
 `cSyntax  `g:`W operation storyline `g(`xtitle`g)`x
 `cExample `g:`W operation storyline A Dearth of Demigods`x
@@ -9739,7 +9707,7 @@ subfaction to make use of this stat, see help associate.
 ~
 End
 
-Keyword Order Contacts~
+Keyword Anarchists Contacts Order Contacts~
 SeeAlso Contacts
 ~
 Level 0
@@ -9749,7 +9717,7 @@ Text `WLevels`x:`c 0, 1, 2, 3, 4, 5`x
 
 `WRequirements`x: Ranks 2-5 requires Professional Focus 1-4.  
 
-This stat represents contacts you have in the Order, with higher levels
+This stat represents contacts you have among the Anarchists, with higher levels
 indicating more important relationships.  
 ~
 End
@@ -9764,12 +9732,12 @@ Text `WLevels`x:`c 0, 1, 2, 3, 4, 5`x
 
 `WRequirements`x: Ranks 2-5 requires Professional Focus 1-4.  
 
-This stat represents contacts you have in the Temple, with higher levels
-indicating more important relationships.  
+This stat represents contacts you have to Temple ruins, copycats, and suppressed files, with higher levels
+indicating deeper access and more dangerous knowledge.  
 ~
 End
 
-Keyword Hand Contacts~
+Keyword Illuminati Contacts~
 SeeAlso Contacts
 ~
 Level 0
@@ -9779,7 +9747,7 @@ Text `WLevels`x:`c 0, 1, 2, 3, 4, 5`x
 
 `WRequirements`x: Ranks 2-5 requires Professional Focus 1-4.  
 
-This stat represents contacts you have in the Hand, with higher levels
+This stat represents contacts you have in the Illuminati, with higher levels
 indicating more important relationships.  
 ~
 End
@@ -13133,53 +13101,6 @@ Using diminish longterm will allow you to debuff your character for several hour
 even days or weeks. This will always echo to the room you are in and if done with the
 visible toggle will also show in your look info, if done with invisible won't be seen,
 and if combatvisible will appear to others when you enter a fight.
-~
-End
-
-Keyword Encounter~
-SeeAlso ~
-Level 0
-Online 0
-Type 0
-Text `cSyntax:`W encounter launch`x
-`cSyntax:`W encounter bringin (message)/stop`x
-`cSyntax:`W encounter join (SR Name)`x
-`cSyntax:`W encounter storyline (storyline name)
-`cSyntax:`W encounter mastermine (character name)`x
-
-Encounters are random IC events run by storyrunners that occur in an
-instanced version of Haven.  
-
-SRs first use encounter launch, this command will find a player and pick
-from a list of 50+ possible encounters, prompting the player with the option
-to join an encounter and giving the name of the SR running it.  The player
-has two minutes to respond, if they accept both they and the SR are moved
-into an instanced copy of the room they were just in, and the SR is given a
-short one to two sentence description of the encounter.  
-
-The SR will then use this writing prompt to create a small RP scene for the
-participants, they will earn enhanced karma for this much like they would
-for running an adventure, but not as much.  During the adventure they can of
-course summon in new people if there's a reason to single them out in
-particular, but they can also make use of the encounter bringin command.  
-
-This command puts the encounter onto the where list with the string the SR
-specifies, appearing as (string) is happening in (room) and also the name of
-the SR and person first recruited.  It also sends an echo to those most
-likely to notice the encounter going on.  From there players can use
-encounter join (SR name) to join the encounter up to a maximum of five.  
-
-SRs can edit encounter rooms with the decorate command. 
- 
-There is a `Wweek cooldown`w on running encounters.
- 
-Every 6 weeks an SR can use encounter launch (name) to launch an encounter with a particular target.
-
-Once the SR sees the encounter they can add it to an existing storyline if they think it fits.
-
-Once added to a storyline they can also assign it a mastermind if it makes sense.
- 
-Be advised that encounters are not private affairs; they show up on `Wsociety view`x for society members.
 ~
 End
 
@@ -16671,20 +16592,20 @@ Meanwhile the Israelites slowly began to pick themselves back up leading eventua
 
 In 33 AD the new religion of Christianity was formed out of that of Judaism, and although nobody noticed much at first it's influence started to rapidly spread, almost as if it was being supernaturally aided.  In 64 AD The council of Rome had noticed this disturbing upswing in the influence of the descendants of Israel and Emperor Nero blamed Christians for the great Fire of Rome that year, creating a massive wave of persecution against Christians throughout the Empire.  In spite of this however, the new religion continue to flourish and many of it's supplicants in secret began working against the supernatural.  More and more ties to the other realms became broken and the Gods finally decided to leave Earth to make their primary residence in another plane, many of the lesser councilmembers who hadn't attained full godhood broke away into their own faction and founded a Golden city in yet another realm in this period leading up to around 300AD, a few remaining on earth and instead heading north away from civilization.  These lesser members are now known as the Fae.  
 
-When Christianity was finally adopted by the Roman Empire officially it was considered a great victory against the council of Rome and ever since the supernatural have been pushed into hiding.  It was around this time when the council of Rome started to be known as Manus, or The Hand.  While the anti-supernatural faction within Christianity and Judaism was called The Temple.  In 150 AD what was left of the Viking council fell to a growing faction of werewolves in Scandinavia.  
+When Christianity was finally adopted by the Roman Empire officially it was considered a great victory against the council of Rome and ever since the supernatural have been pushed into hiding.  It was around this time when the council of Rome started to be known as Manus, or The Illuminati.  The anti-supernatural faction within Christianity and Judaism came to be known as The Temple, a movement that would persist for centuries before finally being wiped out and erased.  In 150 AD what was left of the Viking council fell to a growing faction of werewolves in Scandinavia.  
 
 The Druidic council, long forgotten to the northwest grew strong under the influence of the Fae who traveled there instead of to the Golden City, far removed from the area in which the struggles between the supernatural and natural occurred, from Babylon and the old gates to hell much greater trust existed between the Druids and their people, and they practiced magic openly.  
 
-While the Hand and Temple fought for control of Rome, the long forgotten and newly powerful druidic council, or as it came to be known, the Order, and it's barbarian tribes began to push south, culminating in the collapse of the Western Roman Empire.  At the same time, the Dynasty were being heavily punished by the Mongols and their shamans.  
+While the Illuminati fought for control of Rome and the early Temple waged its hidden war, the long forgotten and newly powerful druidic council, ancestor of the modern Anarchists, and its barbarian tribes began to push south, culminating in the collapse of the Western Roman Empire.  At the same time, the Dynasty were being heavily punished by the Mongols and their shamans.  
 
-During most of the Medieval period control of Europe was divided between the Hand, the Order and the Temple.  The Temple had control of Spain, and Russia, as well as influence in the middle east, whereas the Hand still controlled Italy and England, with the Order retaining control of most of the rest of Europe.  The Temple's influence through Christianity however exerted a heavy hand and they were the most powerful faction for most of this time, all supernaturals needing to exist in secret.  The Viking lands to the north remained largely uncontrolled by the factions, instead being the home to several powerful packs of werewolves.  
+During most of the Medieval period control of Europe was divided between the Illuminati and the Anarchists, with regional powers rising and falling at their margins.  The Temple's influence survived mostly as underground cells and religious pressure, but it steadily lost ground and was ultimately destroyed hundreds of years ago.  In its absence, the surviving societies enforced a world where most humans remain unaware of the supernatural, and those who learn too much are recruited, erased, or exploited.  The Viking lands to the north remained largely uncontrolled by the factions, instead being the home to several powerful packs of werewolves.  
 
-The factions and their agent empires continued to wage war throughout Europe, until the Industrial revolution.  The rise of science diminished the powers of the supernaturals comparatively, while the declining power of religion damaged the Temple.  The factions continued to compete however through attempts to out expand each other, with The Hand locking down territory in Australia and North America, the Order also found some purchase in north America while the Temple claimed much of central and South America.  
+The factions and their agent empires continued to wage war throughout Europe, until the Industrial revolution.  The rise of science diminished the powers of the supernaturals comparatively, and forced the surviving societies to become more covert and sophisticated.  The Illuminati locked down territory in Australia and North America, while the Anarchists also found purchase in North America and consolidated influence across Europe.  
 
 
-At around 1900 the power structure was as follows: The Order controlled most of Canada, and southeastern US.  They also controlled most of Central Europe, and Ireland.  The Hand controlled the economic centers of the US, Italy, Egypt, England and Australiasia, The Temple controlled Mexico, Peru and Brazil, Russia and some parts of the US, particularly central and southern US.  They also controlled Russia, and had a fair hand in the middle east.  Another group, calling themselves the Dynasty held most of Asia, while central south America, and Africa were controlled by regional shamans with little progress being made by the factions into those areas.  Scandinavia continued to be werewolf territory.  The Hand managed to take control of France from The Order, and this kicked off world war one, beginning with a coup in Italy organized by the Order and then their backing of the powers of Germany to try to reclaim France and then England, pushing The Hand entirely out of Europe.  The Temple originally stayed out of the conflict, but then eventually joined on the side of The Hand when it seemed like the Order might be too successful.  The Order was eventually defeated and went into a period of remission, with the Hand reclaiming Italy.  
+At around 1900 the power structure was as follows: The Anarchists controlled most of Canada, and southeastern US.  They also controlled most of Central Europe, and Ireland.  The Illuminati controlled the economic centers of the US, Italy, Egypt, England and Australiasia.  Another group, calling themselves the Dynasty held most of Asia, while central south America, and Africa were controlled by regional shamans with little progress being made by the factions into those areas.  Scandinavia continued to be werewolf territory.  The Illuminati managed to take control of France from The Anarchists, and this kicked off world war one, beginning with a coup in Italy organized by the Anarchists and then their backing of the powers of Germany to try to reclaim France and then England, pushing The Illuminati entirely out of Europe.  The Anarchists were eventually defeated and went into a period of remission, with the Illuminati reclaiming Italy.  
 
-The supernatural group responsible for world war two is unclear, but the effect upon the supernatural world was massive.  All three of the great supernatural factions at the time were broken, most of their members dead or fled they splintered into hundreds of different groups.  
+The supernatural group responsible for world war two is unclear, but the effect upon the supernatural world was massive.  The surviving great societies at the time were broken, most of their members dead or fled and they splintered into hundreds of different groups.  
 
 The cold war between Russia and the United States exacerbated affairs with numberous secrective groups forming and dissolving every few years as supernaturals fought for influence in the shadows.  
 
@@ -17569,7 +17490,7 @@ Text The Fae touch many lives in pursuit of their entertainment. The Circus comp
 
 `YThe Faelings
 `gOverview`w: Wildings who live in the Fae, with their own set of problems and issues to deal with.
-`DCommon Allies`w: The Order, The Lost.
+`DCommon Allies`w: The Anarchists, The Lost.
 `DCommon Enemies`w: None.
 `GPrefers`w: Faeborn.
 `gTypical Tasks`w: Dealing with monsters and other fae threats.
@@ -17605,8 +17526,8 @@ Text `YThe Watchers
  
 `YThe Black Circle`x
 `gOverview`x: A council of magical practitioners devoted to the pursuit of individual power above all else. They tend to perceive non-magically adept supernaturals as only slightly better than humans and judge everyone by their arcane skill and knowledge. They frequently traffic with demons and other higher powers and are famed for the dark magical experiments they conduct on humans and animals alike.
-`DCommon Allies`x: The Hand, The Red Circle, The Syndicate
-`DCommon Enemies`x: The Temple, The White Circle, The Order
+`DCommon Allies`x: The Illuminati, The Red Circle, The Syndicate
+`DCommon Enemies`x: Temple remnants, The White Circle, The Anarchists
 `GPrefers`x: Magical practitioners, ruthless individuals.
 `gTypical Tasks`x: Experimentation, Research, obtaining artifacts and relics, arranging deals, recruitment.
  
@@ -17619,15 +17540,15 @@ Text `YThe Watchers
  
 `YThe White Circle`x
 `gOverview`x: A council of magical practitioners devoted to using their magic to better humanity. They follow a strict code of rules governing legal and illegal use of magic mostly derived from do no harm principles. They spend a lot of time in research, but also in carrying out aid missions.
-`DCommon Allies`x: The Order, The Watchers, The Red Circle
-`DCommon Enemies`x: The Hand, the Black Circle
+`DCommon Allies`x: The Anarchists, The Watchers, The Red Circle
+`DCommon Enemies`x: The Illuminati, the Black Circle
 `GPrefers`x: Magical practitioners, selfless individuals
 `gTypical Tasks`x: Research, aid missions, obtaining artifacts and relics, protection, recruitment
  
 `YThe Coven`x
 `gOverview`x: A group of all female magical practitioners that formed during a time in which most knowledge, including magical knowledge was largely forbidden to women. While all three circles now accept female members the Coven continues as an independent organization. Their attitudes towards magical ethics are as varied as their attitudes towards the circles themselves although they have always traditionally been more closely allied with the black and red circles than the white. 
 `DCommon Allies`x: The Red Circle, The Black Circle, The White Circle
-`DCommon Enemies`x: The Temple, The Order, The Witch Hunters
+`DCommon Enemies`x: Temple remnants, The Anarchists, The Witch Hunters
 `GPrefers`x: Women, magical practitioners
 `gTypical Tasks`x: Research, experimentation, obtaining artifacts and relics, recruitment.
 ~
@@ -17665,14 +17586,14 @@ highly stealth oriented assassins who use modern weapons as well as biomancy to
 augment their strength, speed and durability, but are otherwise human. Those
 who anger them and are caught by their agents are never heard of again.
 `DCommon Allies`x: Chinese Intelligence
-`DCommon Enemies`x: The Hand, The Order, The Temple.
+`DCommon Enemies`x: The Illuminati, The Anarchists, Temple remnants.
 `GPrefers`x: Asians
 `gTypical Tasks`x: None
  
 `YThe Witch Hunters`x
 `gOverview`x: The Witch Hunters are a loose assemblage of people dedicated to the elimination of supernatural threats. Their central leadership and history are fairly religious but today anyone who wants to go after dangerous supernaturals and black magic can be endorsed as a member and given assistance with weapons and training to do so and most of their members are those who've previously suffered at the hands of supernatural forces. While they target all types of dangerous supernaturals they have a strong historical enmity to black magic in particular and have a fierce rivalry with the Coven owing to a long history of grievances from both sides.
 `DCommon Allies`x: The Temple, The Hunters
-`DCommon Enemies`x: The Coven, The Black Circle, The Hand
+`DCommon Enemies`x: The Coven, The Black Circle, The Illuminati
 `GPrefers`x: Humans, Religious Individuals, those seeking vengeance
 `gTypical Tasks`x: Identifying, tracking and eliminating supernaturals and magical practitioners
 ~
@@ -17687,7 +17608,7 @@ Text Demonic and angelic scions often find brotherhood amongst their own. The Fr
 
 `YThe Free
 `gOverview`w: An angelborn support group, while of limited power the group works to improve the lives of angelborn everywhere, who have a tendency to end up in bad situations.
-`DCommon Allies`w: The Order, The Beastmasters.
+`DCommon Allies`w: The Anarchists, The Beastmasters.
 `DCommon Enemies`w: The Syndicate.
 `GPrefers`w: Angelborn.
 `gTypical Tasks`w: Saving angelborn.
@@ -17715,7 +17636,7 @@ Text Demonic and angelic scions often find brotherhood amongst their own. The Fr
  
 `YThe Vampire Empire`x
 `gOverview`x: The Empire is an alliance of Vampire courts from many different countries and cities, dedicated to the promotion of vampire rights and powers throughout the world. While theoretically ruled by an emperor or empress the last empress was slain 250 years ago and has yet to be replaced. In theory the vampire empire is one of the most powerful organizations in the supernatural world but in practice they tend to spend most of their time politicking amongst themselves for greater status and power or even for a shot at the coveted Throne of Bones. If something is a large enough threat to the Vampire community overall though for them to come together they can do so with terrifying speed and ferocity.
-`DCommon Allies`x: The Vampire Court of New York, The Hand
+`DCommon Allies`x: The Vampire Court of New York, The Illuminati
 `DCommon Enemies`x: The Temple, The Hunters
 `GPrefers`x: Vampires, virgins
 `gTypical Tasks`x: Obtain new bloodstock, protect members, recruitment, eliminate threats
@@ -17752,7 +17673,7 @@ Text There are numerous groups and alliances working constantly to keep the worl
 
 `YThe Beastmasters
 `gOverview`w: A support group for those who've been fleshformed at some point in their life by Fae, Gods or Demons and now have to live with their altered forms.
-`DCommon Allies`w: The Order, Redwood Pack, The Lost.
+`DCommon Allies`w: The Anarchists, Redwood Pack, The Lost.
 `DCommon Enemies`w: The Circus, The Chosen, The Gamemasters, The God houses.
 `GPrefers`w: Supernaturals, homeless contacts.
 `gTypical Tasks`w: Protecting their members, rescuing them, settling them.
@@ -21413,7 +21334,7 @@ Text `c[`WMental Schemes`c]`g:`x
  `y Aegis`g:`x
  `c `c Cost`g `g `g `g `g `g `g `g `g :`W 100`g,`W000`c `c `c Average Duration`g:`W 1 `xweek.
  `c `c Valid Targets`g:`x Automatic; worldwide
- `x `x `x Prevents all violence between supernaturals and naturals worldwide and increases the influence of The Order and their allies.
+ `x `x `x Prevents all violence between supernaturals and naturals worldwide and increases the influence of The Anarchists and their allies.
  
  `y Cleanse`g:`x
  `c `c Cost`g `g `g `g `g `g `g `g `g :`W 100`g,`W000`c `c `c Average Duration`g:`W 1 `xweek.
@@ -21423,7 +21344,7 @@ Text `c[`WMental Schemes`c]`g:`x
  `y Dominance`g:`x
  `c `c Cost`g `g `g `g `g `g `g `g `g :`W 100`g,`W000`c `c `c Average Duration`g:`W 7 `xdays.
  `c `c Valid Targets`g:`x Automatic; Naturals worldwide
- `x `x `x A scheme which makes all naturals influenced by the desires of supernaturals much like angelborn and increases the power of all mind control on natural humans worldwide. It also increases the influence of the Hand and their allies.
+ `x `x `x A scheme which makes all naturals influenced by the desires of supernaturals much like angelborn and increases the power of all mind control on natural humans worldwide. It also increases the influence of the Illuminati and their allies.
  
 `c[`WOther Schemes`c]`g:`x
  `y Catastrophe`g:`x
@@ -27866,7 +27787,7 @@ It is also where any threats from outside earth would first arrive, making
 it an important fortress and beachhead should earth ever be attacked.  
 
 For these reasons it drew the interest of the three most powerful
-supernatural organizations in the world, The Hand, The Order and The Temple.
+supernatural organizations in the world, The Illuminati, The Anarchists and the long-dead Temple.
 These organizations all shared a common goal in holding Haven as a defensive
 bastion, but also are all in competition over the resources that can be
 obtained from it.  Many attempts to strike an accord between them failed,

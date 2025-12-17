@@ -8935,32 +8935,8 @@ extern "C" {
 
     }
     else if (ch->pcdata->ci_editing == 18) {
-      if(strlen(ch->pcdata->ci_short) < 2)
-      {
-        send_to_char("You have to specify the Eidolon that the encounter will be caused by.\n\r", ch);
-        return;
-      }
-      if(strlen(ch->pcdata->ci_desc) < 100)
-      {
-        send_to_char("You have to specify the encounter text.\n\r", ch);
-        return;
-      }
-      FACTION_TYPE *cult = clan_lookup(ch->fcult);
-      FACTION_TYPE *sect = clan_lookup(ch->fsect);
-      int fpoint = 0;
-      if(cult != NULL && !str_cmp(cult->eidilon, ch->pcdata->ci_short))
-      fpoint = cult->vnum;
-      else if(sect != NULL && !str_cmp(sect->eidilon, ch->pcdata->ci_short))
-      fpoint = sect->vnum;
-      else
-      {
-        send_to_char("You aren't in a cult or sect with that Eidolon.\n\r", ch);
-        return;
-      }
-
-      add_encounter(2, ch->pcdata->ci_discipline, ch->pcdata->ci_desc, fpoint);
       ch->pcdata->ci_editing = 0;
-      send_to_char("Done.\n\r", ch);
+      send_to_char("Encounters have been removed.\n\r", ch);
       return;
     }
     else if (ch->pcdata->ci_editing == 19) {
@@ -9543,16 +9519,16 @@ extern "C" {
           return;
         }
         if (clan_lookup(ch->faction)->parent == FACTION_HAND) {
-          if (str_cmp("The Hand", first_dom_terr(loc))) {
-            if (str_cmp("The Hand", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
+          if (str_cmp("The Illuminati", first_dom_terr(loc))) {
+            if (str_cmp("The Illuminati", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
               send_to_char("You're not close enough with the government of that territory for that.\n\r", ch);
               return;
             }
           }
         }
         if (clan_lookup(ch->faction)->parent == FACTION_ORDER) {
-          if (str_cmp("The Order", first_dom_terr(loc))) {
-            if (str_cmp("The Order", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
+          if (str_cmp("The Anarchists", first_dom_terr(loc))) {
+            if (str_cmp("The Anarchists", second_dom_terr(loc)) || loc->status != STATUS_SHARED) {
               send_to_char("You're not close enough with the government of that territory for that.\n\r", ch);
               return;
             }

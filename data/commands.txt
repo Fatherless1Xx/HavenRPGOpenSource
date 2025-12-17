@@ -2509,16 +2509,6 @@ Flags     0
 End
 
 #COMMAND
-Name      encounter~
-Code      do_encounter
-Position  0
-Level     1
-Log       0
-Show      1
-Flags     0 
-End
-
-#COMMAND
 Name      exsanguinate~
 Code      do_exsanguinate
 Position  0
@@ -8221,16 +8211,6 @@ End
 #COMMAND
 Name      shh~
 Code      do_shh
-Position  0
-Level     100
-Log       0
-Show      0
-Flags     0 
-End
-
-#COMMAND
-Name      setdoom~
-Code      do_setdoom
 Position  0
 Level     100
 Log       0

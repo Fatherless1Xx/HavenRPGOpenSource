@@ -3242,12 +3242,6 @@ printf_to_char(to, "Valid: %d, Cooldown: %d, vnum: %d, Name: %s", (*it)->valid, 
       return;
     }
 
-    if (!str_cmp(arg1, "encounter")) {
-      ch->pcdata->ci_discipline = number_range(5, 45);
-      ch->pcdata->ci_editing = 18;
-      send_to_char("Done.\n\r", ch);
-      return;
-    }
     if (!str_cmp(arg1, "patrol")) {
       ch->pcdata->ci_editing = 19;
       send_to_char("Done.\n\r", ch);

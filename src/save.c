@@ -1517,12 +1517,6 @@ int summary_helpless;*/
     if (safe_strlen(tch->pcdata->last_bitten) > 1)
     fprintf(fp, "LastBitten %s~\n", tch->pcdata->last_bitten);
 
-    if (tch->pcdata->doom_date > 1)
-    {
-      fprintf(fp, "Doom %d\n", tch->pcdata->doom_date);
-      fprintf(fp, "DoomDesc %s~\n", tch->pcdata->doom_desc);
-    }
-    fprintf(fp, "DoomCustom %s~\n", tch->pcdata->doom_custom);
     for (x = 0; x < 25; x++) {
       if (tch->pcdata->memories[x] != NULL && safe_strlen(tch->pcdata->memories[x]) > 1)
       fprintf(fp, "Memory %s~\n", tch->pcdata->memories[x]);
@@ -2848,9 +2842,20 @@ KEYS( "ChatHistory", ch->pcdata->chat_history,      fread_string( fp )
         KEY("DestinyFeatureRoom", ch->pcdata->destiny_feature_room,
         fread_number(fp));
         KEY("DreamFromOutfit", ch->pcdata->dreamfromoutfit, fread_number(fp));
-        KEY("Doom", ch->pcdata->doom_date, fread_number(fp));
-        KEY("DoomDesc", ch->pcdata->doom_desc, fread_string(fp));
-        KEY("DoomCustom", ch->pcdata->doom_custom, fread_string(fp));
+        if (!str_cmp(word, "Doom")) {
+          fread_number(fp);
+          fMatch = TRUE;
+        }
+        if (!str_cmp(word, "DoomDesc")) {
+          char *tmp = fread_string(fp);
+          free_string(tmp);
+          fMatch = TRUE;
+        }
+        if (!str_cmp(word, "DoomCustom")) {
+          char *tmp = fread_string(fp);
+          free_string(tmp);
+          fMatch = TRUE;
+        }
         KEY("DeployCore", ch->deploy_core, fread_number(fp));
         KEY("DeployCult", ch->deploy_cult, fread_number(fp));
         KEY("DeploySect", ch->deploy_sect, fread_number(fp));

@@ -5101,10 +5101,6 @@ extern "C" {
     return 0;
 
     if (!str_cmp(ch->name, fac->leader)) {
-      if (fac->axes[AXES_SUPERNATURAL] == AXES_FARLEFT && !seems_super(ch) && event_cleanse == 0)
-      val -= 10;
-      if (fac->axes[AXES_SUPERNATURAL] == AXES_FARRIGHT && seems_super(ch) && event_cleanse == 0)
-      val -= 10;
       if (fac->axes[AXES_CORRUPT] <= AXES_FARLEFT && get_tier(ch) <= 2 && fac->axes[AXES_CORRUPT] > 0)
       val -= 10;
       if (fac->axes[AXES_CORRUPT] <= AXES_NEARLEFT && get_tier(ch) <= 1 && fac->axes[AXES_CORRUPT] > 0)
@@ -5118,46 +5114,6 @@ extern "C" {
       if(view != NULL)
       printf_to_char(view, "Leader effect: %d\n\r", val);
     }
-
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_FARLEFT) {
-      if (seems_super(ch))
-      bonus += 4;
-      else
-      bonus -= 4;
-    }
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_MIDLEFT) {
-      if (seems_super(ch))
-      bonus += 3;
-      else
-      bonus -= 3;
-    }
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_NEARLEFT) {
-      if (seems_super(ch))
-      bonus += 1;
-      else
-      bonus -= 1;
-    }
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_FARRIGHT) {
-      if (seems_super(ch))
-      bonus -= 4;
-      else
-      bonus += 4;
-    }
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_MIDRIGHT) {
-      if (seems_super(ch))
-      bonus -= 3;
-      else
-      bonus += 3;
-    }
-    if (fac->axes[AXES_SUPERNATURAL] == AXES_NEARRIGHT) {
-      if (seems_super(ch))
-      bonus -= 1;
-      else
-      bonus += 1;
-    }
-
-    if (view != NULL && bonus != 0)
-    printf_to_char(view, "Supernatural Position: %d ", bonus);
 
     if (fac->axes[AXES_CORRUPT] == AXES_FARLEFT) {
       if (get_tier(ch) >= 3)

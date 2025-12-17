@@ -195,7 +195,7 @@ if(!str_prefix("Niamey", (*it)->name))
 (*it)->radius = (*it)->radius*3/2;
 if(!str_prefix("Cordoba", (*it)->name))
 (*it)->radius = (*it)->radius*3/2;
-if(!str_prefix("Hand", (*it)->name))
+if(!str_prefix("Illuminati", (*it)->name))
 (*it)->radius = (*it)->radius*13/3;
 if(!str_prefix("Dynasty", (*it)->name))
 (*it)->radius = (*it)->radius*3;

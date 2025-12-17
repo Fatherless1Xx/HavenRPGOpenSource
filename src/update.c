@@ -2699,10 +2699,17 @@ sprintf(buf, "BloodStats %s, %d %d %d %d\n\r", ch->name, total, total_skills(ch)
         workinglf = workinglf * 4 / 5;
       }
       if ((*it)->type == EVENT_OPERATION || (*it)->typetwo == EVENT_OPERATION) {
-        if (char_in_alliance_with(ch, (*it)->faction))
-        workinglf *= 2;
-        else
-        workinglf /= 2;
+        FACTION_TYPE *event_fac = clan_lookup((*it)->faction);
+        int alliance_issue = time_info.sect_alliance_issue;
+        if (event_fac != NULL && event_fac->type == FACTION_CULT)
+        alliance_issue = time_info.cult_alliance_issue;
+
+        if (alliance_issue != AXES_SUPERNATURAL) {
+          if (char_in_alliance_with(ch, (*it)->faction))
+          workinglf *= 2;
+          else
+          workinglf /= 2;
+        }
       }
       if ((*it)->type == EVENT_CATASTROPHE || (*it)->typetwo == EVENT_CATASTROPHE)
       workinglf = workinglf * 3 / 5;
@@ -10057,40 +10064,6 @@ world: %d, room area: %d, desti area: %d\n\r", room->vnum, desti->vnum, vehicle_
           }
         }
 
-        if (!IS_FLAG(to->act, PLR_DEAD)) {
-          if (to->pcdata->doom_date <= 1 && time_info.minute % 13 == 0) {
-            set_doom(to);
-          }
-          if (to->pcdata->doom_date > 1 && to->pcdata->doom_date < current_time && to->pcdata->doom_date > current_time - (3600 * 24 * 28)) {
-            if(to->pcdata->doom_countdown == 0)
-            to->pcdata->doom_countdown = 60;
-            if(to->pcdata->doom_countdown > 0)
-            {
-              to->pcdata->doom_countdown--;
-              if(to->pcdata->doom_countdown == 1)
-              {
-                send_to_char("Your doom catches up to you.\n\r", to);
-                real_kill(to, to);
-                if (!IS_NPC(to)) {
-                  free_string(to->pcdata->deathcause);
-                  to->pcdata->deathcause = str_dup("Unclear");
-                }
-              }
-              else
-              {
-                send_to_char("You feel your doom approaching.\n\r(You need to log off or reroll this character immediately to prevent their death.\n\r", to);
-                return;
-              }
-            }
-          }
-          else if (to->pcdata->doom_date > 1 && to->pcdata->doom_date < current_time) {
-            free_string(to->pcdata->doom_desc);
-            to->pcdata->doom_desc = str_dup("");
-            set_doom(to);
-          }
-        }
-
-
         if (time_info.minute % 3 == 0) {
           if (in_fight(to) && to->fight_fast == FALSE) {
             if (to->fight_current == NULL || to->fight_current->in_room == NULL || !same_fight(to, to->fight_current))
@@ -10265,57 +10238,6 @@ minute_update(clock_minute);
       }
     }
   }
-  void update_ai_doom(std::vector<std::string> tarray)
-  {
-    struct stat sb;
-    char buf[MSL];
-    DESCRIPTOR_DATA d;
-    bool online = FALSE;
-    CHAR_DATA *victim;
-
-    d.original = NULL;
-    if ((victim = get_char_world_pc(const_cast<char*>(tarray[1].c_str()))) != NULL) // Victim is online.
-    online = TRUE;
-    else {
-      log_string("DESCRIPTOR: Offline doom");
-
-      if (!load_char_obj(&d, const_cast<char*>(tarray[1].c_str()))) {
-        return;
-      }
-
-      sprintf(buf, "%s%s", PLAYER_DIR, capitalize(tarray[1].c_str()));
-      stat(buf, &sb);
-      victim = d.character;
-    }
-    if (IS_NPC(victim)) {
-      if (!online)
-      free_char(victim);
-      return;
-    }
-    if(strlen(victim->pcdata->doom_desc) > 1)
-    {
-      if (!online)
-      free_char(victim);
-      return;
-    }
-    int days = std::stoi(tarray[2]);
-    char logs[MSL];
-    sprintf(logs, "Days: %d", days);
-    log_string(logs);
-    free_string(victim->pcdata->doom_desc);
-    victim->pcdata->doom_desc = str_dup(tarray[3].c_str());
-    victim->pcdata->doom_date = current_time + (days * 3600 * 24);
-    sprintf(buf, "%s\nYou receive a prophecy: %s", victim->pcdata->messages, tarray[3].c_str());
-    free_string(victim->pcdata->messages);
-    victim->pcdata->messages = str_dup(buf);
-    save_char_obj(victim, FALSE, FALSE);
-
-    if (!online)
-    free_char(victim);
-    else
-    printf_to_char(victim, "You receive a prophecy: %s\n\r", victim->pcdata->doom_desc);
-  }
-
   void update_ai_social(std::vector<std::string> tarray)
   {
     log_string("AI SOCIAL UPDATE");
@@ -10658,17 +10580,8 @@ minute_update(clock_minute);
       log_string(inputString.c_str());
       std::vector<std::string> tarray = splitString(inputString, "|||");
       int arg1 = std::stoi(tarray[0]);
-      if (arg1 == 1) {
-        int arg2 = std::stoi(tarray[1]);
-        std::string arg3 = tarray[2];
-        add_encounter(1, arg2, &arg3[0], 0);
-      }
       if( arg1 == 2) {
         update_ai_operation(tarray);
-      }
-      if(arg1 == 3)
-      {
-        update_ai_doom(tarray);
       }
       if(arg1 == 4)
       {
@@ -10800,7 +10713,6 @@ minute_update(clock_minute);
 
   void ai_minute()
   {
-    ai_encounter_job();
     ai_operation_job();
     ai_log_job();
   }

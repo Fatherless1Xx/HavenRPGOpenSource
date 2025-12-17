@@ -7997,7 +7997,7 @@ offline_reward((*it)->author, TYPE_KARMA, 2500);
 #define SF_WHITECIRCLE 57
 #define SF_VAMPIREEMP 58
 
-  char *const subfac_names[] = {"None", "The Black Circle", "Order ShieldBearers", "Order SwordBearers", "Order Librarians", "Temple Strike Force", "Temple Intelligence", "Temple Demolishers", "The Peacekeeping Hand", "The Shadow Hand", "The Whispering Hand", "The Dynasty", "The Red Circle", "Aquarian Guard", "Sheriff", "FBI", "Interpol", "RockField Bounties", "The Mob", "Russian Mafia", "Desmond King", "CIA", "MI6", "Chinese Intelligence", "Rushell Industries", "Tyrell Corp", "The Hanshin Group", "New World Order", "The Chosen", "The Forsaken", "The Prometheans", "The House of Odin", "The House of Ra", "The House of Zeus", "The House of Jade", "The House of Vishnu", "The House of Jupiter", "The Undergods", "The Circus", "The Gamemasters", "The Beastmasters", "The Banished", "The Syndicate", "The Watchers", "The Sentinels", "The Lost", "The Faelings", "The Vampire Court of New York", "The Redwood Pack", "The Free", "The Illarin Empire", "The People", "The Kingdom of Nar", "The Coven", "The Witch Hunters", "The Hunters", "Russian Intelligence Service", "The White Circle", "The Vampire Empire"};
+  char *const subfac_names[] = {"None", "The Black Circle", "Anarchist Rioters", "Anarchist Raiders", "Anarchist Firebrands", "Temple Strike Force", "Temple Intelligence", "Temple Demolishers", "The Peacekeeping Illuminati", "The Shadow Illuminati", "The Whispering Illuminati", "The Dynasty", "The Red Circle", "Aquarian Guard", "Sheriff", "FBI", "Interpol", "RockField Bounties", "The Mob", "Russian Mafia", "Desmond King", "CIA", "MI6", "Chinese Intelligence", "Rushell Industries", "Tyrell Corp", "The Hanshin Group", "New World Order", "The Chosen", "The Forsaken", "The Prometheans", "The House of Odin", "The House of Ra", "The House of Zeus", "The House of Jade", "The House of Vishnu", "The House of Jupiter", "The Undergods", "The Circus", "The Gamemasters", "The Beastmasters", "The Banished", "The Syndicate", "The Watchers", "The Sentinels", "The Lost", "The Faelings", "The Vampire Court of New York", "The Redwood Pack", "The Free", "The Illarin Empire", "The People", "The Kingdom of Nar", "The Coven", "The Witch Hunters", "The Hunters", "Russian Intelligence Service", "The White Circle", "The Vampire Empire"};
 
   char *get_subfac_name(int val) { return subfac_names[val]; }
   char *reward_string(int val) {
@@ -10570,6 +10570,9 @@ continue;
   }
 
   _DOFUN(do_encounter) {
+    send_to_char("Encounters have been removed.\n\r", ch);
+    return;
+
     char arg1[MSL];
     argument = one_argument_nouncap(argument, arg1);
     CHAR_DATA *victim;
@@ -26183,75 +26186,6 @@ return;
     // 100 is complete darkness at trust 1. Whisper at > 50, brush at > 75, // hallucinate at 100, possess at 150
     return power;
   }
-
-  // 11 for t5
-  // 5 for t3
-  int doom_days(CHAR_DATA *ch) {
-    double tcount = (double)ch->pcdata->account->tier_count /
-    UMAX(1.0, (double)ch->pcdata->account->total_count);
-    double ntcount = sqrt(tcount * tcount * tcount);
-    double ocount = (double)time_info.lweek_tier / UMAX(1.0, (double)time_info.lweek_total);
-    double otcount = sqrt(ocount * ocount * ocount);
-
-    int ctier = race_table[ch->race].tier;
-
-    int sdays = 0;
-    if (ctier == 5)
-    sdays = 90;
-    else if (ctier == 4)
-    sdays = 110;
-    else if (ctier == 3)
-    sdays = 170;
-    else if (ctier == 2)
-    sdays = 350;
-    else if (ctier == 1)
-    sdays = 450;
-
-    if (!is_super(ch))
-    sdays = sdays * 3 / 2;
-
-    if (ch->race == RACE_LOCAL || ch->race == RACE_IMPORTANT || ch->race == RACE_DEPUTY || ch->race == RACE_FACULTY)
-    sdays = sdays * 3 / 2;
-
-    sdays = sdays * number_range(90, 110) / 100;
-
-    sdays = sdays + 30;
-
-    sdays = sdays - (ntcount * 6);
-    sdays = sdays - (otcount * 3);
-    return sdays;
-  }
-
-  void find_doom(CHAR_DATA *ch)
-  {
-    char buf[MSL];
-    int doomdays = doom_days(ch);
-    sprintf(buf, "3,0,%s,%d,,,", ch->name, doomdays);
-    log_string(buf);
-    writeLineToFile(AI_IN_FILE, str_dup(buf));
-  }
-
-  void set_doom(CHAR_DATA *ch) {
-    if (is_gm(ch) || higher_power(ch))
-    return;
-
-    if(strlen(ch->pcdata->doom_desc) < 2 && ch->played/3600 >= 20 && strlen(ch->pcdata->history) > 100)
-    {
-      if(strlen(ch->pcdata->doom_custom) > 5)
-      {
-        free_string(ch->pcdata->doom_desc);
-        ch->pcdata->doom_desc = str_dup(ch->pcdata->doom_custom);
-        free_string(ch->pcdata->doom_custom);
-        ch->pcdata->doom_custom = str_dup("");
-        ch->pcdata->doom_date = current_time + (3600 * 24 * (doom_days(ch)));
-      }
-      else
-      find_doom(ch); // create the ai job
-    }
-    else if(ch->played/3600 >= 60)
-    ch->pcdata->doom_date = current_time + (3600 * 24 * (doom_days(ch) - 10));
-  }
-
 
   _DOFUN(do_outputencounters)
   {

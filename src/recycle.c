@@ -575,8 +575,6 @@ extern "C" {
     free_string(pcdata->finale_location);
     free_string(pcdata->speaking);
     free_string(pcdata->dream_origin);
-    free_string(pcdata->doom_desc);
-    free_string(pcdata->doom_custom);
     free_string(pcdata->dreamplace);
     free_string(pcdata->dreamtitle);
     free_string(pcdata->murder_name);
@@ -1480,6 +1478,8 @@ extern "C" {
     account->pkarma = 0;
     account->karmabank = 0;
     account->karmaearned = 0;
+    account->weekly_rp_karma = 0;
+    account->weekly_rp_karma_week = 0;
     account->encounter_karma = 0;
     account->adventure_karma = 0;
     account->mystery_karma = 0;
@@ -4304,10 +4304,6 @@ int last_msg;
     pcdata->brandstatus = 0;
     pcdata->last_develop_type = 0;
     pcdata->last_develop_time = 0;
-    pcdata->doom_date = 0;
-    pcdata->doom_countdown = 0;
-    pcdata->doom_desc = str_dup("");
-    pcdata->doom_custom = str_dup("");
     pcdata->speaking = str_dup("English");
     pcdata->dream_origin = str_dup("");
     pcdata->murder_name = str_dup("");

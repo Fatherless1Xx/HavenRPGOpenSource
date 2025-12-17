@@ -2426,17 +2426,22 @@ extern "C" {
             }
           }
 
-          sprintf(buf, "FEEDING LUST: %s(%d) feeds %s(%d): %d taken, %d given, %d cap, %d pop, %d base", ch->name, get_tier(ch), victim->name, get_tier(victim), amount, amount / 3, UMIN(cap - base_lifeforce(victim), amount / 3), pc_pop(ch->in_room), base_lifeforce(ch));
-          log_string(buf);
+          if (str_cmp(ch->pcdata->last_sexed[0], victim->name) && str_cmp(ch->pcdata->last_sexed[1], victim->name) && str_cmp(ch->pcdata->last_sexed[2], victim->name))
+          amount = amount * 3 / 2;
+
+          int caploss = UMAX(0, base_lifeforce(ch) - 5000);
+          amount = UMIN(amount, caploss);
+          amount = UMIN(amount, 100);
           if (amount <= 0)
           return;
 
-          give_lifeforce(victim, UMAX(0, UMIN(cap - base_lifeforce(victim), amount / 4)), "Lust feeding");
-          if (str_cmp(ch->pcdata->last_sexed[0], victim->name) && str_cmp(ch->pcdata->last_sexed[1], victim->name) && str_cmp(ch->pcdata->last_sexed[2], victim->name))
-          amount = amount * 3 / 2;
-          amount = UMIN(amount, 3800);
-          if (get_tier(ch) > 1)
-          amount = UMIN(amount, 3000);
+          int given = amount * 4 / 5;
+
+          sprintf(buf, "FEEDING LUST: %s(%d) feeds %s(%d): %d taken, %d given, %d cap, %d pop, %d base", ch->name, get_tier(ch), victim->name, get_tier(victim), amount, given, UMIN(cap - base_lifeforce(victim), given), pc_pop(ch->in_room), base_lifeforce(ch));
+          log_string(buf);
+
+
+          give_lifeforce(victim, UMAX(0, UMIN(cap - base_lifeforce(victim), given)), "Lust feeding");
 
           take_lifeforce(ch, amount, "Lust feeding");
           if (IS_FLAG(victim->comm, COMM_FEEDING)) {
@@ -2446,7 +2451,7 @@ extern "C" {
             victim->pcdata->monster_fed += amount / 3;
           }
 
-          ch->pcdata->ill_count += amount;
+          ch->pcdata->ill_count += UMAX(1, amount / 10);
           if (base_lifeforce(ch) < 6000 && number_percent() % 3 == 0 && ch->pcdata->sleeping <= 0) {
             free_string(ch->pcdata->deathcause);
             ch->pcdata->deathcause = str_dup("a stroke.");

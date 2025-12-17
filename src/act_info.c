@@ -82,7 +82,7 @@ extern "C" {
 
     // Commented out for spacing and new styling - Discordance
     // if ( IS_OBJ_STAT(obj, ITEM_HAND) )
-    //	strcat( buf, "(`rHand`x) ");
+    //	strcat( buf, "(`rIlluminati`x) ");
     // if ( IS_OBJ_STAT(obj, ITEM_ORDER) )
     //	strcat( buf, "(`rOrder`x) ");
     // if ( IS_OBJ_STAT(obj, ITEM_TEMPLE) )
@@ -4724,14 +4724,6 @@ extern "C" {
 
   _DOFUN(do_prompt) {
     char buf[MAX_STRING_LENGTH];
-    if (ch->pcdata->ci_editing == 18) {
-      ch->pcdata->ci_absorb = 1;
-      string_append(ch, &ch->pcdata->ci_desc);
-      send_to_char("Write the alternative encounter prompt.\n\r", ch);
-      return;
-    }
-
-
     if (argument[0] == '\0') {
       if (IS_FLAG(ch->comm, COMM_PROMPT)) {
         send_to_char("You will no longer see prompts.\n\r", ch);
@@ -6874,27 +6866,7 @@ extern "C" {
     printf_to_char(ch, "%s| |`x\n\r", border);
     // Line 8 - Border
     printf_to_char(ch, "%s| ", border);
-    if (target->pcdata->doom_date > 1) {
-      time_t doomtime;
-      doomtime = target->pcdata->doom_date;
-
-      struct tm *timeinfo;
-      timeinfo = localtime(&doomtime);
-
-      char month[20];
-      strftime(month, sizeof(month), "%B", timeinfo);
-
-      int day = timeinfo->tm_mday;
-      int year = 1900 + timeinfo->tm_year;
-
-      sprintf(string, "%s       Dies%s:`x %s %d%s, %d", fields, border, month, day, get_day_suffix(day), year);
-
-      printf_to_char(ch, "%s", string);
-      spacing = 52 - safe_strlen_color(string);
-    }
-    else {
-      spacing = 52;
-    }
+    spacing = 52;
 
     printf_to_char(ch, "%*s", spacing, spacer);
     sprintf(string, "%s'----------------------'", border);
@@ -14647,28 +14619,6 @@ extern "C" {
 
     // where title output
     display_where_char(ch);
-
-    bool isencounter = FALSE;
-    for (DescList::iterator it = descriptor_list.begin();
-    it != descriptor_list.end(); ++it) {
-      DESCRIPTOR_DATA *d = *it;
-
-      if (d->character != NULL && d->connected == CON_PLAYING) {
-        victim = d->character;
-        if (!is_gm(victim) || encounter_victim(victim) == NULL || safe_strlen(victim->pcdata->encounter_bringin) < 2 || pc_pop(victim->in_room) >= 5) {
-          continue;
-        }
-
-        remove_color(room_name, roomtitle(victim->in_room, FALSE));
-        if (isencounter == FALSE) {
-          outbuf2.strcat("\n\r   `cEncounters`g:`x\n\r");
-        }
-
-        isencounter = TRUE;
-        sprintf(buf, "%s is happening %s.\n%s with %s and %d others.\n\r", victim->pcdata->encounter_bringin, room_name, victim->name, PERS(encounter_victim(victim), ch), pc_pop(victim->in_room) - 1);
-        outbuf2.strcat(buf);
-      }
-    }
     bool donefirst = FALSE;
     if(can_super_lure(ch, NULL))
     {
