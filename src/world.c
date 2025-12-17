@@ -117,24 +117,24 @@ extern "C" {
   }
 
   // stock descriptions to cut down on resource use
-  char *stock_description(CHAR_DATA *ch, ROOM_INDEX_DATA *room) {
-    char buf[MSL];
-    strcpy(buf, "");
+  const char *stock_description(CHAR_DATA *ch, ROOM_INDEX_DATA *room) {
+    static char buf[MSL];
+    buf[0] = '\0';
     ROOM_INDEX_DATA *room_template;
 
     // greenspace
     if (strcasestr(room->name, "delete") != NULL) {
-      return "";
+      return buf;
     }
 
     if (battleground(room))
-    return "";
+    return buf;
 
-    tm *ptm;
+    struct tm *ptm;
     ptm = gmtime(&current_time);
 
     if (institute_room(room)) {
-      return "";
+      return buf;
     }
 
     if (room->area->vnum >= HAVEN_TOWN_VNUM && room->area->vnum <= HELL_FOREST_VNUM && room->area->vnum != HAVEN_OCEAN_VNUM) {
@@ -543,7 +543,7 @@ becomes an ever shrinking line on the horizon.  For miles in the distance, indee
     }
     // send_to_char(buf, ch);
 
-    return str_dup(buf);
+    return buf;
   }
 
   // for turning rooms back into forest - Discordance
@@ -2789,11 +2789,11 @@ malice.\n");
     return TRUE;
   }
 
-  char *const status_phases[] = {"None",          "`cPeaceful`x", "`cPeaceful`x", "`rContested`x", "`RWar`x",      "`cPeaceful`x"};
-  char *const continent_phases[] = {
+  const char *const status_phases[] = {"None",          "`cPeaceful`x", "`cPeaceful`x", "`rContested`x", "`RWar`x",      "`cPeaceful`x"};
+  const char *const continent_phases[] = {
     "None",  "North America", "South America", "Europe", "Asia",  "Africa",        "Australasia",   "Wilds", "Other", "Godrealm",      "Hell"};
 
-  LOCATION_TYPE *get_loc(char *argument) {
+  LOCATION_TYPE *get_loc(const char *argument) {
     for (vector<LOCATION_TYPE *>::iterator it = locationVect.begin();
     it != locationVect.end(); ++it) {
       if (!(*it)->name || (*it)->name[0] == '\0') {
@@ -3072,11 +3072,11 @@ malice.\n");
     east_time = current_time;
     char tmp[MSL];
     char datestr[MSL];
-    sprintf(tmp, "%s", (char *)ctime(&east_time));
+    snprintf(tmp, sizeof(tmp), "%s", (char *)ctime(&east_time));
 
-    sprintf(datestr, "%c%c%c %c%c%c %c%c %c%c%c%c", tmp[0], tmp[1], tmp[2], tmp[4], tmp[5], tmp[6], tmp[8], tmp[9], tmp[20], tmp[21], tmp[22], tmp[23]);
+    snprintf(datestr, sizeof(datestr), "%c%c%c %c%c%c %c%c %c%c%c%c", tmp[0], tmp[1], tmp[2], tmp[4], tmp[5], tmp[6], tmp[8], tmp[9], tmp[20], tmp[21], tmp[22], tmp[23]);
 
-    sprintf(buf, "%s\n%s: %s", loc->timeline, datestr, argument);
+    snprintf(buf, sizeof(buf), "%.25000s\n%.64s: %.25000s", loc->timeline ? loc->timeline : "", datestr, argument ? argument : "");
     free_string(loc->timeline);
     loc->timeline = str_dup(buf);
   }
@@ -3151,7 +3151,6 @@ malice.\n");
         send_to_char("No such territory.\n\r", ch);
         return;
       }
-      int num = number_from_territory(loc);
       free_string(ch->pcdata->ci_name);
       ch->pcdata->ci_name = str_dup(loc->name);
       send_to_char("Done.\n\r", ch);
@@ -5142,7 +5141,7 @@ area = 1;
     return max;
   }
 
-  char *first_dom_terr(LOCATION_TYPE *loc) {
+  const char *first_dom_terr(LOCATION_TYPE *loc) {
     int point = 0;
     int max = 0;
     for (int i = 0; i < 10; i++) {
@@ -5160,7 +5159,7 @@ area = 1;
 
     return loc->other_name[point];
   }
-  char *second_dom_terr(LOCATION_TYPE *loc) {
+  const char *second_dom_terr(LOCATION_TYPE *loc) {
     int high = first_terr_points(loc);
     int point = 0;
     int max = 0;
@@ -5413,202 +5412,217 @@ area = 1;
 
   int const month_temperature[] = {32, 33, 41, 52, 62, 72, 77, 74, 68, 59, 47, 35};
 
-  void assign_weather(ROOM_INDEX_DATA *room, LOCATION_TYPE *territory, bool climate) {
-    if (room == NULL)
-    return;
-    tm *ptm;
+void assign_weather(ROOM_INDEX_DATA *room, LOCATION_TYPE *territory, bool climate)
+{
     time_t east_time;
+    struct tm *ptm;
+
+    if (room == NULL)
+        return;
+
+    if (territory == NULL)
+    {
+        room->timezone = 0;
+        room->temperature = 65;
+        room->cloud_cover = 0;
+        room->cloud_density = 0;
+        room->raining = FALSE;
+        room->hailing = FALSE;
+        room->snowing = FALSE;
+        return;
+    }
 
     east_time = current_time;
     ptm = gmtime(&east_time);
+    if (ptm == NULL)
+        return;
 
     room->timezone = territory->timezone;
 
     int month = ptm->tm_mon;
 
     if (territory->continent == CONTINENT_WILDS)
-    month += 5;
+        month += 5;
     else if (territory->continent == CONTINENT_OTHER)
-    month += 1;
+        month += 1;
     else if (territory->continent == CONTINENT_GODREALM)
-    month -= 2;
+        month -= 2;
     else if (territory->continent == CONTINENT_HELL)
-    month += 9;
+        month += 9;
 
-    if (month < 0)
-    month += 12;
-    if (month > 11)
-    month -= 12;
+    while (month < 0)
+        month += 12;
+    while (month > 11)
+        month -= 12;
 
     int temp = month_temperature[month];
 
     temp += tempmod(get_hour(room));
 
     int baseshift = 54 - month_temperature[month];
-
     int basey = 425;
-
     int yshift = territory->y - basey;
-    // New zealand is 371
 
     temp += baseshift * yshift / 150;
 
     temp += 2;
 
     int equatorial = territory->y - 400;
-
     if (equatorial < 0)
-    equatorial *= -1;
+        equatorial *= -1;
 
     temp -= equatorial / 10;
 
     if (territory->x >= 720 && territory->x <= 865 && temp < 50)
-    temp = temp * 4 / 3;
+        temp = temp * 4 / 3;
 
-    if (climate == TRUE) {
-      if (territory->battleclimate == BATTLE_MOUNTAINS)
-      temp -= 10;
-      if (territory->battleclimate == BATTLE_DESERT)
-      temp += 10;
-      if (territory->battleclimate == BATTLE_TUNDRA)
-      temp -= 20;
+    if (climate == TRUE)
+    {
+        if (territory->battleclimate == BATTLE_MOUNTAINS)
+            temp -= 10;
+        if (territory->battleclimate == BATTLE_DESERT)
+            temp += 10;
+        if (territory->battleclimate == BATTLE_TUNDRA)
+            temp -= 20;
     }
+
     if (!str_cmp(territory->name, "Northgard, Godrealm"))
-    temp -= 30;
+        temp -= 30;
+
     room->temperature = temp;
 
     room->cloud_cover = 100 - temp;
     room->cloud_cover += number_range(-50, 50);
+
     room->cloud_density = 100 - temp;
     room->cloud_density += number_range(-30, 30);
 
-    if (climate == TRUE) {
-      if (territory->battleclimate == BATTLE_DESERT) {
-        room->cloud_density -= 50;
-        room->cloud_cover -= 20;
-      }
-      if (territory->battleclimate == BATTLE_FOREST || territory->battleclimate == BATTLE_LAKE) {
-        room->cloud_density += 10;
-      }
-      if (territory->battleclimate == BATTLE_MOUNTAINS || territory->battleclimate == BATTLE_TUNDRA) {
-        room->cloud_density += 30;
-        room->cloud_cover += 20;
-      }
+    if (climate == TRUE)
+    {
+        if (territory->battleclimate == BATTLE_MOUNTAINS)
+        {
+            room->cloud_cover += 20;
+            room->cloud_density += 20;
+        }
+        if (territory->battleclimate == BATTLE_DESERT)
+        {
+            room->cloud_cover -= 30;
+            room->cloud_density -= 30;
+        }
+        if (territory->battleclimate == BATTLE_TUNDRA)
+        {
+            room->cloud_cover += 10;
+            room->cloud_density += 10;
+        }
     }
-    room->cloud_cover = UMAX(0, room->cloud_cover);
-    room->cloud_cover = UMIN(100, room->cloud_cover);
-    room->cloud_density = UMAX(0, room->cloud_density);
-    room->cloud_density = UMIN(100, room->cloud_density);
+
+    room->cloud_cover = URANGE(0, room->cloud_cover, 100);
+    room->cloud_density = URANGE(0, room->cloud_density, 100);
 
     int hailchance = 0;
     int rainchance = 0;
     int snowchance = 0;
 
-    if (room->cloud_cover >= 100 && room->cloud_density >= 90 && room->temperature < 35)
-    hailchance = 5;
+    if (temp <= 32)
+        snowchance += (32 - temp) * 3;
 
-    if (room->cloud_cover >= 80 && room->cloud_density >= 80 && room->temperature < 40 && room->temperature > 20)
-    snowchance = 30;
+    if (temp > 32 && temp < 60)
+        rainchance += (60 - temp);
 
-    if (room->cloud_cover >= 80 && room->cloud_density >= 70 && room->temperature > 45)
-    rainchance = 65;
+    if (temp >= 60)
+        rainchance += (temp - 60) / 2;
 
-    if (climate == TRUE && territory->battleclimate == BATTLE_MOUNTAINS)
-    snowchance *= 3;
-    if (climate == TRUE && territory->battleclimate == BATTLE_TUNDRA)
-    snowchance *= 5;
+    if (room->cloud_density > 70)
+        rainchance += (room->cloud_density - 70);
 
-    if (climate == TRUE && territory->battleclimate == BATTLE_DESERT) {
-      hailchance = 0;
-      snowchance = 0;
-      rainchance = UMIN(rainchance, 5);
-    }
-    if (!str_cmp(territory->name, "Northgard, Godrealm"))
-    snowchance *= 3;
+    if (room->cloud_density > 85)
+        hailchance += (room->cloud_density - 85) * 2;
 
-    if (hailchance > (number_range(1, 9473) % 100))
-    room->hailing = 1;
-    else if (snowchance > (number_range(1, 8563) % 100))
-    room->snowing = 1;
-    else if (rainchance > (number_range(1, 5838) % 100))
-    room->raining = 1;
-  }
+    if (temp <= 34)
+        hailchance += (34 - temp) * 2;
 
-  char *weather_forecast(LOCATION_TYPE *territory, int havenhour) {
-    tm *ptm;
-    time_t east_time;
+    room->raining = (number_percent() < rainchance);
+    room->snowing = (number_percent() < snowchance);
+    room->hailing = (number_percent() < hailchance);
 
-    east_time = current_time;
-    ptm = gmtime(&east_time);
+    if (room->snowing)
+        room->raining = FALSE;
+    if (room->hailing)
+        room->raining = TRUE;
+}
+
+const char *weather_forecast(LOCATION_TYPE *territory, int havenhour)
+{
+    if (territory == NULL)
+        return "Weather data unavailable.\r\n";
+
+    time_t east_time = current_time;
+    struct tm *ptm = gmtime(&east_time);
+    if (ptm == NULL)
+        return "Weather data unavailable.\r\n";
 
     int hour = havenhour + territory->timezone;
 
     if (hour >= 24)
-    hour -= 24;
+        hour -= 24;
     if (hour < 0)
-    hour += 24;
+        hour += 24;
 
     int month = ptm->tm_mon;
 
     if (territory->continent == CONTINENT_WILDS)
-    month += 5;
+        month += 5;
     else if (territory->continent == CONTINENT_OTHER)
-    month += 1;
+        month += 1;
     else if (territory->continent == CONTINENT_GODREALM)
-    month -= 2;
+        month -= 2;
     else if (territory->continent == CONTINENT_HELL)
-    month += 9;
+        month += 9;
 
     if (month < 0)
-    month += 12;
+        month += 12;
     if (month > 11)
-    month -= 12;
+        month -= 12;
 
     int temp = month_temperature[month];
 
     temp += tempmod(hour);
 
     int baseshift = 54 - month_temperature[month];
-
     int basey = 425;
-
     int yshift = territory->y - basey;
-    // New zealand is 371
 
     temp += baseshift * yshift / 150;
 
     temp += 2;
 
     int equatorial = territory->y - 400;
-
     if (equatorial < 0)
-    equatorial *= -1;
+        equatorial *= -1;
 
     temp -= equatorial / 10;
 
     if (territory->x >= 720 && territory->x <= 865 && temp < 50)
-    temp = temp * 4 / 3;
+        temp = temp * 4 / 3;
 
     if (territory->battleclimate == BATTLE_MOUNTAINS)
-    temp -= 10;
+        temp -= 10;
     if (territory->battleclimate == BATTLE_DESERT)
-    temp += 10;
+        temp += 10;
     if (territory->battleclimate == BATTLE_TUNDRA)
-    temp -= 20;
+        temp -= 20;
 
-    int cloud_cover = 0;
-    int cloud_density = 0;
+    int cloud_cover = 100 - temp;
+    int cloud_density = 100 - temp;
 
-    cloud_cover = 100 - temp;
-    cloud_density = 100 - temp;
-
-    if (territory->battleclimate == BATTLE_DESERT) {
-      cloud_density -= 50;
-      cloud_cover -= 20;
+    if (territory->battleclimate == BATTLE_DESERT)
+    {
+        cloud_density -= 50;
+        cloud_cover -= 20;
     }
-    if (territory->battleclimate == BATTLE_FOREST || territory->battleclimate == BATTLE_LAKE) {
-      cloud_density += 10;
-    }
+
+    if (territory->battleclimate == BATTLE_FOREST || territory->battleclimate == BATTLE_LAKE)
+        cloud_density += 10;
 
     cloud_cover = UMAX(0, cloud_cover);
     cloud_cover = UMIN(100, cloud_cover);
@@ -5620,29 +5634,35 @@ area = 1;
     int snowchance = 0;
 
     if (cloud_cover >= 100 && cloud_density >= 90 && temp < 35)
-    hailchance = 5;
+        hailchance = 5;
 
     if (cloud_cover >= 80 && cloud_density >= 80 && temp < 40 && temp > 20)
-    snowchance = 30;
+        snowchance = 30;
 
     if (cloud_cover >= 80 && cloud_density >= 70 && temp > 45)
-    rainchance = 65;
+        rainchance = 65;
 
     if (territory->battleclimate == BATTLE_MOUNTAINS)
-    snowchance *= 3;
+        snowchance *= 3;
     if (territory->battleclimate == BATTLE_TUNDRA)
-    snowchance *= 5;
+        snowchance *= 5;
 
-    if (territory->battleclimate == BATTLE_DESERT) {
-      hailchance = 0;
-      snowchance = 0;
-      rainchance = UMIN(rainchance, 5);
+    if (territory->battleclimate == BATTLE_DESERT)
+    {
+        hailchance = 0;
+        snowchance = 0;
+        rainchance = UMIN(rainchance, 5);
     }
-    char buf[MSL];
+
+    static char buf[MSL];
     buf[0] = '\0';
+
     char message[MSL];
+    message[0] = '\0';
+
     temp += 2;
     temp = temp - (temp % 5);
+
     int cel = temp - 32;
     cel *= 5;
     cel /= 9;
@@ -5675,7 +5695,7 @@ area = 1;
     strcat(buf, message);
     strcat(buf, ".");
 
-    return str_dup(buf);
+    return buf;
   }
 
   void skyfix(AREA_DATA *pArea, int type) {
@@ -6548,59 +6568,93 @@ int maxx = 92;
     }
   }
 
-  void offworld_weather_update(void) {
-    AREA_DATA *pArea = get_area_data(HELL_FOREST_VNUM);
-    ROOM_INDEX_DATA *room = get_room_index(pArea->min_vnum);
+  void offworld_weather_update(void)
+{
+    AREA_DATA *pArea = NULL;
+    ROOM_INDEX_DATA *room = NULL;
+    LOCATION_TYPE *loc = NULL;
+
+    pArea = get_area_data(HELL_FOREST_VNUM);
+    if (pArea == NULL)
+        return;
+
+    room = get_room_index(pArea->min_vnum);
     if (room == NULL)
-    return;
-    LOCATION_TYPE *loc = get_loc("District 82");
-    assign_weather(room, loc, FALSE);
-    hell_temperature = room->temperature;
-    hell_cloud_cover = room->cloud_cover;
-    hell_cloud_density = room->cloud_density;
-    hell_raining = room->raining;
-    hell_hailing = room->hailing;
-    hell_snowing = room->snowing;
+        return;
+
+    loc = get_loc("District 82");
+    if (loc != NULL)
+    {
+        assign_weather(room, loc, FALSE);
+        hell_temperature = room->temperature;
+        hell_cloud_cover = room->cloud_cover;
+        hell_cloud_density = room->cloud_density;
+        hell_raining = room->raining;
+        hell_hailing = room->hailing;
+        hell_snowing = room->snowing;
+    }
 
     pArea = get_area_data(OTHER_FOREST_VNUM);
+    if (pArea == NULL)
+        return;
+
     room = get_room_index(pArea->min_vnum);
     if (room == NULL)
-    return;
+        return;
+
     loc = get_loc("Lauriea");
-    assign_weather(room, loc, FALSE);
-    other_temperature = room->temperature;
-    other_cloud_cover = room->cloud_cover;
-    other_cloud_density = room->cloud_density;
-    other_raining = room->raining;
-    other_hailing = room->hailing;
-    other_snowing = room->snowing;
+    if (loc != NULL)
+    {
+        assign_weather(room, loc, FALSE);
+        other_temperature = room->temperature;
+        other_cloud_cover = room->cloud_cover;
+        other_cloud_density = room->cloud_density;
+        other_raining = room->raining;
+        other_hailing = room->hailing;
+        other_snowing = room->snowing;
+    }
 
     pArea = get_area_data(GODREALM_FOREST_VNUM);
+    if (pArea == NULL)
+        return;
+
     room = get_room_index(pArea->min_vnum);
     if (room == NULL)
-    return;
+        return;
+
     loc = get_loc("Rhagost");
-    assign_weather(room, loc, FALSE);
-    godrealm_temperature = room->temperature;
-    godrealm_cloud_cover = room->cloud_cover;
-    godrealm_cloud_density = room->cloud_density;
-    godrealm_raining = room->raining;
-    godrealm_hailing = room->hailing;
-    godrealm_snowing = room->snowing;
+    if (loc != NULL)
+    {
+        assign_weather(room, loc, FALSE);
+        godrealm_temperature = room->temperature;
+        godrealm_cloud_cover = room->cloud_cover;
+        godrealm_cloud_density = room->cloud_density;
+        godrealm_raining = room->raining;
+        godrealm_hailing = room->hailing;
+        godrealm_snowing = room->snowing;
+    }
 
     pArea = get_area_data(WILDS_FOREST_VNUM);
+    if (pArea == NULL)
+        return;
+
     room = get_room_index(pArea->min_vnum);
     if (room == NULL)
-    return;
+        return;
+
     loc = get_loc("Navorost");
-    assign_weather(room, loc, FALSE);
-    wilds_temperature = room->temperature;
-    wilds_cloud_cover = room->cloud_cover;
-    wilds_cloud_density = room->cloud_density;
-    wilds_raining = room->raining;
-    wilds_hailing = room->hailing;
-    wilds_snowing = room->snowing;
-  }
+    if (loc != NULL)
+    {
+        assign_weather(room, loc, FALSE);
+        wilds_temperature = room->temperature;
+        wilds_cloud_cover = room->cloud_cover;
+        wilds_cloud_density = room->cloud_density;
+        wilds_raining = room->raining;
+        wilds_hailing = room->hailing;
+        wilds_snowing = room->snowing;
+    }
+}
+
 
   bool valid_antag_target(int faction, LOCATION_TYPE *terr) {
     if (terr->lockout > current_time)

@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-extern "C" void    logfi(char * fmt, ...);
+extern "C" int     logfi(const char * fmt, ...);
 
 string str_rem_color(const string target);
 

@@ -6522,7 +6522,7 @@ return;
     legacy_update(ch);
     curse_update(ch);
 
-    if (!IS_FLAG(ch->act, PLR_GUEST) && (ch->pcdata->guest_type == NULL || ch->pcdata->guest_type <= 0)) {
+    if (IS_FLAG(ch->act, PLR_GUEST) && ch->pcdata->guest_type <= 0) {
       REMOVE_FLAG(ch->act, PLR_GUEST);
     }
 
@@ -10644,7 +10644,7 @@ minute_update(clock_minute);
 
       operative_outfit(ch, sranged, lranged, smelee, lmelee, armor);
       char buf[MSL];
-      sprintf(buf, "%s is revealed as $n.", olook);
+      snprintf(buf, sizeof(buf), "%.27000s is revealed as $n.", olook);
       act(buf, ch, NULL, NULL, TO_ROOM);
       act(buf, ch, NULL, NULL, TO_CHAR);
     } catch (const std::exception& e) {

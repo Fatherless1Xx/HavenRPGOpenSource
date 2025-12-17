@@ -9,7 +9,8 @@ cd ..
 nohup python3 run_python_engine.py > python_engine.log 2>&1 &
 
 echo Starting game server
+port="${1:-2350}"
 cd bin || exit 1
-nohup ./startup > startup.log 2>&1 &
+nohup ./startup "$port" > startup.log 2>&1 &
 
 echo Haven started
