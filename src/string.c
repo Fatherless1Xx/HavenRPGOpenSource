@@ -1046,7 +1046,7 @@ Called by:	string_add(string.c)
     buf[0] = '\0';
     while (*string) {
       string = getline2(string, tmpb);
-      sprintf(buf2, "%2d. %s\n\r", cnt++, tmpb);
+      snprintf(buf2, sizeof(buf2), "%2d. %.900s\n\r", cnt++, tmpb);
       strcat(buf, buf2);
     }
     return buf;
@@ -1307,6 +1307,5 @@ return 0;
 #if defined(__cplusplus)
 }
 #endif
-
 
 

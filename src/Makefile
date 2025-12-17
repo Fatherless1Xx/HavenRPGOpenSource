@@ -4,6 +4,12 @@ NOCRYPT =
 C_FLAGS =  -Wall -Wno-deprecated -Wno-write-strings -fno-stack-protector $(PROF) $(NOCRYPT) -I$(CURDIR)/rapidjson
 L_FLAGS =  $(PROF) -Wl,--no-as-needed -ldl -rdynamic -fno-stack-protector
 LIBS    = -lcrypt -lcurl
+SANITIZE ?= 0
+ifeq ($(SANITIZE),1)
+SAN_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer -O1 -g3
+C_FLAGS += $(SAN_FLAGS)
+L_FLAGS += -fsanitize=address,undefined
+endif
 
 O_FILES = abominations.o act_comm.o act_info.o act_move.o act_obj.o act_wiz.o \
 	  alias.o attract.o ban.o bit.o bitarray.o \

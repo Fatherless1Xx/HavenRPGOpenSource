@@ -959,6 +959,7 @@ extern "C" {
         KEY("Hour", op->hour, fread_number(fp));
         KEY("HomeSoldiers", op->home_soldiers, fread_number(fp));
         break;
+      case 'I':
         KEY("InitDays", op->initdays, fread_number(fp));
         break;
       case 'M':

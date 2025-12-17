@@ -24,6 +24,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if !defined(_WIN32)
+#include <sys/stat.h>
+#else
+#include <direct.h>
+#endif
 #include <time.h>
 #include <vector>
 
@@ -33,6 +38,26 @@ extern "C" {
 
 #define DIF(a, b) (~((~a) | (b)))
   void do_function args((CHAR_DATA * ch, DO_FUN *do_fun, char *argument));
+
+static void ensure_backup_dirs(void) {
+#if defined(_WIN32)
+  _mkdir("back1");
+  _mkdir("back2");
+  _mkdir("back3");
+  _mkdir("back4");
+  _mkdir("back5");
+  _mkdir("back6");
+  _mkdir("back7");
+#else
+  mkdir("back1", 0755);
+  mkdir("back2", 0755);
+  mkdir("back3", 0755);
+  mkdir("back4", 0755);
+  mkdir("back5", 0755);
+  mkdir("back6", 0755);
+  mkdir("back7", 0755);
+#endif
+}
 
   /*
 *  Verbose writes reset data in plain english into the comments
@@ -1009,24 +1034,25 @@ void save_area(AREA_DATA *pArea, bool backup) {
   }
   else {
     char buf[MSL];
+    ensure_backup_dirs();
     if (time_info.day % 7 == 0)
-    sprintf(buf, "back1/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back1/%s", pArea->file_name);
     else if (time_info.day % 6 == 0)
-    sprintf(buf, "back2/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back2/%s", pArea->file_name);
     else if (time_info.day % 5 == 0)
-    sprintf(buf, "back3/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back3/%s", pArea->file_name);
     else if (time_info.day % 4 == 0)
-    sprintf(buf, "back4/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back4/%s", pArea->file_name);
     else if (time_info.day % 3 == 0)
-    sprintf(buf, "back5/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back5/%s", pArea->file_name);
     else if (time_info.day % 2 == 0)
-    sprintf(buf, "back6/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back6/%s", pArea->file_name);
     else
-    sprintf(buf, "back7/%s", pArea->file_name);
+    snprintf(buf, sizeof(buf), "back7/%s", pArea->file_name);
 
     if (!(fp = fopen(buf, "w"))) {
       bug("Open_area: fopen", 0);
-      perror(pArea->file_name);
+      perror(buf);
     }
   }
   if (fp == NULL)

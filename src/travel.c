@@ -1404,7 +1404,7 @@ return;
 
     if (ch->pcdata->travel_prepped == FALSE && (traveltype == TRAVEL_PATHING || traveltype == TRAVEL_HORSE)) {
       char buf[MSL];
-      sprintf(buf, "%s %s %s", arg1, arg2, argument);
+      snprintf(buf, sizeof(buf), "%.9000s %.9000s %.9000s", arg1, arg2, argument);
       ch->pcdata->process = PROCESS_TRAVEL_PREP;
       ch->pcdata->process_timer = 5;
       ch->pcdata->process_subtype = traveltype;

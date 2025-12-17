@@ -1203,7 +1203,7 @@ extern "C" {
           if (is_name("torn", obj->short_descr) || is_name("loose", obj->short_descr) || is_name("baggy", obj->short_descr))
           continue;
 
-          sprintf(buf, "torn %s", obj->short_descr);
+          snprintf(buf, sizeof(buf), "torn %.27000s", obj->short_descr);
           free_string(obj->short_descr);
           obj->short_descr = str_dup(buf);
 
@@ -1211,8 +1211,10 @@ extern "C" {
           if (does_cover(obj, cover_table[val]))
           obj->value[0] -= cover_table[val];
 
-          obj->description = one_argument_nouncap(obj->description, arg1);
-          sprintf(buf, "%s torn %s", arg1, obj->description);
+          {
+            char *rest = one_argument_nouncap(obj->description, arg1);
+            snprintf(buf, sizeof(buf), "%.1000s torn %.26000s", arg1, rest);
+          }
 
           free_string(obj->description);
           obj->description = str_dup(buf);

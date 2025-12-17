@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include "telnet.h"
 #include "merc.h"
@@ -163,32 +164,57 @@ extern "C" {
     current_time = (time_t)now_time.tv_sec;
     strcpy(str_boot_time, ctime(&current_time));
 
-    /*
-    * Get the port number.
-    */
-    port = 4000;
-    if (argc > 1) {
-      if (!is_number(argv[1])) {
+/*
+* Get the port number.
+*/
+	port = 2350;
+	if (argc > 1)
+{
+    if (!is_number(argv[1]))
+    {
         fprintf(stderr, "Usage: %s [port #]\n", argv[0]);
         exit(1);
-      }
-      else if ((port = atoi(argv[1])) <= 1024) {
+    }
+    else if ((port = atoi(argv[1])) <= 1024)
+    {
         fprintf(stderr, "Port number must be above 1024.\n");
         exit(1);
-      }
-
-      /* Are we recovering from a copyover? */
-      if (argv[2] && argv[2][0]) {
-        fCopyOver = TRUE;
-        control = atoi(argv[3]);
-      }
-      else
-      fCopyOver = FALSE;
     }
+}
+
+/* Are we recovering from a copyover */
+fCopyOver = FALSE;
+
+if (argc > 3 && argv[2] && !str_cmp(argv[2], "copyover"))
+{
+    fCopyOver = TRUE;
+    control = atoi(argv[3]);
+}
 
     /*
-    * Run the game.
-    */
+     * Defensive: if copyover args were passed incorrectly, fall back to normal
+     * socket init instead of looping/crashing on an invalid inherited fd.
+     */
+#if !defined(_WIN32)
+    if (fCopyOver) {
+      int opt = 0;
+      socklen_t optlen = sizeof(opt);
+      int acceptconn = 0;
+      socklen_t acclen = sizeof(acceptconn);
+
+      if (control <= 0 ||
+          getsockopt(control, SOL_SOCKET, SO_TYPE, &opt, &optlen) < 0 ||
+          getsockopt(control, SOL_SOCKET, SO_ACCEPTCONN, &acceptconn, &acclen) < 0 ||
+          acceptconn == 0) {
+        log_string("Invalid copyover control socket; starting fresh.");
+        fCopyOver = FALSE;
+      }
+    }
+#endif
+
+/*
+* Run the game.
+*/
     if (!fCopyOver)
     control = init_socket(port);
 
@@ -584,10 +610,16 @@ extern "C" {
     }
 
     if (!d->got_ident) {
-      sprintf(lbuf, "Colour prompt: %d, max d: %d, d size: %lu", d->descriptor, max_d(), descriptor_list.size());
-      log_string(lbuf);
-      write_to_buffer(d, "Would you like colour? (Y/n) ", 0);
-      d->connected = CON_ANSI_COLOR;
+      /*
+       * Only prompt here if the descriptor is explicitly waiting on ident.
+       * New connections now get prompted immediately on accept.
+       */
+      if (d->connected == CON_IDENT_WAIT) {
+        sprintf(lbuf, "Colour prompt: %d, max d: %d, d size: %lu", d->descriptor, max_d(), descriptor_list.size());
+        log_string(lbuf);
+        write_to_buffer(d, "Would you like colour? (Y/n) ", 0);
+        d->connected = CON_ANSI_COLOR;
+      }
     }
 
     d->got_ident = TRUE;
@@ -597,97 +629,90 @@ extern "C" {
 
 
 #if defined(unix)
-  void create_ident( DESCRIPTOR_DATA *d, long ip )
+
+void create_ident( DESCRIPTOR_DATA *d, long ip )
+{
+  int fds[2];
+  pid_t pid;
+  char str_ip[64];
+
+  d->ifd  = -1;
+  d->ipid = -1;
+
+  if ( pipe(fds) != 0 )
   {
-    int fds[2];
-    pid_t pid;
-
-    /* Create Pipe first */
-    if ( pipe( fds ) != 0 )
-    {
-      perror( "Create_ident: pipe: " );
-      return;
-    }
-
-    if ( dup2( fds[1], STDOUT_FILENO ) != STDOUT_FILENO )
-    {
-      perror( "Create_ident: dup2(stdout): " );
-      close( fds[0] );
-      return;
-    }
-
-    switch( (pid = fork()) )
-    {
-      char str_ip[64];
-
-      /* Parent Process */
-    default:
-      d->ifd  = fds[0];
-      d->ipid = pid;
-      break;
-
-      /* Child Process */
-    case 0:
-      d->ifd  = fds[0];
-      d->ipid = pid;
-
-      sprintf( str_ip, "%ld", ip );
-      //              execl( RESOLVE_FILE, "resolve", str_ip, 0 );
-      execl( RESOLVE_FILE, "resolve", str_ip, NULL );
-
-      /* Still here --> hmm. An error. */
-      log_string( "Exec failed; Closing child." );
-      close( fds[0] );
-      d->ifd  = -1;
-      d->ipid = -1;
-
-      exit( 0 );
-      break;
-
-      /* Error */
-    case (pid_t)-1:
-      perror( "Create_ident: fork" );
-      close( fds[0] );
-      break;
-    }
-
-    close( fds[1] );
+    perror("Create_ident: pipe");
+    return;
   }
+
+  pid = fork();
+  if ( pid < 0 )
+  {
+    perror("Create_ident: fork");
+    close(fds[0]);
+    close(fds[1]);
+    return;
+  }
+
+  if ( pid == 0 )
+  {
+    close(fds[0]);
+
+    if ( dup2(fds[1], STDOUT_FILENO) == -1 )
+      exit(0);
+
+    close(fds[1]);
+
+    snprintf(str_ip, sizeof(str_ip), "%ld", ip);
+    execl(RESOLVE_FILE, "resolve", str_ip, (char *)NULL);
+
+    exit(0);
+  }
+
+  close(fds[1]);
+  d->ifd  = fds[0];
+  d->ipid = pid;
+}
+
 #else
-  void create_ident( DESCRIPTOR_DATA *d, long ip )
+
+void create_ident( DESCRIPTOR_DATA *d, long ip )
+{
+  int fds[2];
+  char str_ip[64];
+
+  d->ifd  = -1;
+  d->ipid = -1;
+
+  if ( _pipe(fds, 4096, O_BINARY) != 0 )
   {
-    int fds[2];
-    char str_ip[64];
-
-    /* Create Pipe first */
-    if ( _pipe( fds, 64, O_TEXT ) != 0 )
-    {
-      perror( "Create_ident: pipe: " );
-      return;
-    }
-
-    if ( _dup2( fds[1], STDOUT_FILENO ) != STDOUT_FILENO )
-    {
-      perror( "Create_ident: dup2(stdout): " );
-      _close( fds[0] );
-      return;
-    }
-
-    sprintf( str_ip, "%ld", ip );
-    d->ipid = _spawnl(_P_NOWAIT, RESOLVE_FILE, "resolve", str_ip, 0);
-
-    if(d->ipid = -1)
-    {
-      log_string( "_Spawnl failed; Closing child." );
-      _close( fds[0] );
-      d->ifd  = -1;
-      d->ipid = -1;
-    }
-    _close( fds[1] );
+    perror("Create_ident: _pipe");
+    return;
   }
+
+  _snprintf(str_ip, sizeof(str_ip), "%ld", ip);
+
+  d->ipid = _spawnl(
+    _P_NOWAIT,
+    RESOLVE_FILE,
+    "resolve",
+    str_ip,
+    (char *)NULL
+  );
+
+  if ( d->ipid == -1 )
+  {
+    log_string("_spawnl failed; Closing child.");
+    _close(fds[0]);
+    _close(fds[1]);
+    return;
+  }
+
+  _close(fds[1]);
+  d->ifd = fds[0];
+}
+
 #endif
-
-
 
   int init_socket(int port) {
     static struct sockaddr_in sa_zero;
@@ -789,21 +814,31 @@ extern "C" {
     struct itimerval itime;
     struct timeval interval;
 
-    Signal(SIGBUS, sig_handler);
-    Signal(SIGTERM, sig_handler);
-    Signal(SIGABRT, sig_handler);
-    Signal(SIGSEGV, sig_handler);
-    Signal(SIGALRM, sig_handler);
+    const char *disable_recovery = getenv("HAVEN_DISABLE_SIGNAL_RECOVERY");
+    if (disable_recovery != NULL && disable_recovery[0] != '\0') {
+      Signal(SIGBUS, SIG_DFL);
+      Signal(SIGTERM, SIG_DFL);
+      Signal(SIGABRT, SIG_DFL);
+      Signal(SIGSEGV, SIG_DFL);
+      Signal(SIGALRM, SIG_DFL);
+    }
+    else {
+      Signal(SIGBUS, sig_handler);
+      Signal(SIGTERM, sig_handler);
+      Signal(SIGABRT, sig_handler);
+      Signal(SIGSEGV, sig_handler);
+      Signal(SIGALRM, sig_handler);
+
+      /* This is for deadlock protection. */
+      interval.tv_sec = 180;
+      interval.tv_usec = 0;
+      itime.it_interval = interval;
+      itime.it_value = interval;
+      setitimer(ITIMER_VIRTUAL, &itime, NULL);
+      Signal(SIGVTALRM, sig_deadprotection);
+    }
     Signal(SIGCHLD, sig_chld);
     Signal(SIGPIPE, SIG_IGN);
-
-    /* This is for deadlock protection. */
-    interval.tv_sec = 180;
-    interval.tv_usec = 0;
-    itime.it_interval = interval;
-    itime.it_value = interval;
-    setitimer(ITIMER_VIRTUAL, &itime, NULL);
-    Signal(SIGVTALRM, sig_deadprotection);
 #endif
 #endif
   }
@@ -1330,7 +1365,7 @@ extern "C" {
     dnew = new_descriptor();
     dnew->descriptor = desc;
     dnew->mxp = FALSE; // Initially MXP is off - Discordance
-    dnew->connected = CON_IDENT_WAIT;
+    dnew->connected = CON_ANSI_COLOR;
     dnew->ident = str_dup("???");
     dnew->ifd = -1;
     dnew->ipid = -1;
@@ -1348,21 +1383,32 @@ extern "C" {
       */
       int addr;
 
-      create_ident(dnew, sock.sin_addr.s_addr);
+      /*
+       * Ident lookups can stall on modern networks; opt-in via env var.
+       * When disabled, we still proceed with a prompt immediately.
+       */
+      {
+        const char *enable_ident = getenv("HAVEN_ENABLE_IDENT");
+        if (enable_ident != NULL && enable_ident[0] != '\0')
+          create_ident(dnew, sock.sin_addr.s_addr);
+      }
       addr = ntohl(sock.sin_addr.s_addr);
       sprintf(buf, "%d.%d.%d.%d", (addr >> 24) & 0xFF, (addr >> 16) & 0xFF, (addr >> 8) & 0xFF, (addr)&0xFF);
       sprintf(log_buf, "Sock.sinaddr, %d:  %s", desc, buf);
       log_string(log_buf);
       free_string(dnew->hostip);
       dnew->hostip = str_dup(buf);
+      if (dnew->host == NULL || dnew->host[0] == '\0') {
+        free_string(dnew->host);
+        dnew->host = str_dup(buf);
+      }
     }
 
     /*
     * Init descriptor data.
     */
     descriptor_list.push_front(dnew);
-    //    write_to_buffer( dnew, "Please wait while we do a quick hostname
-    //    lookup...\n\r", 0);
+    write_to_buffer(dnew, "Would you like colour? (Y/n) ", 0);
 
     if (++num_descriptors > sysdata->maxplayers)
     sysdata->maxplayers = num_descriptors;
@@ -5275,9 +5321,9 @@ extern "C" {
     DESCRIPTOR_DATA *d;
     FILE *fp;
     char name[100];
-    char host[MSL];
-    char hostip[MSL];
-    int desc;
+    char host[MAX_INPUT_LENGTH];
+    char hostip[MAX_INPUT_LENGTH];
+    int desc = -1;
     bool fOld;
     char buf[MAX_STRING_LENGTH];
 
@@ -5285,20 +5331,46 @@ extern "C" {
 
     fp = fopen(COPYOVER_FILE, "r");
 
-    if (!fp) /* there are some descriptors open which will hang forever then ? */
-    {
+    if (!fp) {
       perror("copyover_recover:fopen");
-      logfi("Copyover file not found. Exitting.\n\r");
-      exit(1);
+      logfi("Copyover file not found; continuing without recovery.\n\r");
+      return;
     }
 
     unlink(
     COPYOVER_FILE); /* In case something crashes - doesn't prevent reading  */
 
     for (;;) {
-      fscanf(fp, "%d %s %s %s\n", &desc, name, host, hostip);
+      char line[MSL];
+      if (fgets(line, sizeof(line), fp) == NULL)
+        break;
+
+      /* Fast-path end marker lines written by do_auto_shutdown(). */
+      if (line[0] == '-' && line[1] == '1')
+        break;
+
+      name[0] = '\0';
+      host[0] = '\0';
+      hostip[0] = '\0';
+
+      /*
+       * Use width-limited parsing to avoid buffer overflow on corrupt copyover files.
+       * Format: <fd> <name> <host> <hostip>
+       */
+      if (sscanf(line, "%d %99s %1023s %1023s", &desc, name, host, hostip) != 4) {
+        if (line[0] == '\0' || line[0] == '\n' || line[0] == '\r')
+          continue;
+        logfi("copyover_recover: malformed line: %s", line);
+        continue;
+      }
+
       if (desc == -1)
-      break;
+        break;
+
+      if (desc < 0 || desc > 65535) {
+        logfi("copyover_recover: invalid descriptor %d for %s", desc, name);
+        continue;
+      }
 
       /* Write something, and check if it goes error-free */
       if (!write_to_descriptor(desc, "\n\rRestoring from copyover...\n\r", 0)) {
@@ -5448,34 +5520,35 @@ extern "C" {
   * Formats string and outputs to a buffer
   * Author: Scaelorn
   */
-  void writef_to_buffer(DESCRIPTOR_DATA *d, char *fmt, ...) {
+  void writef_to_buffer(DESCRIPTOR_DATA *d, const char *fmt, ...) {
     char buf[MAX_STRING_LENGTH];
     va_list args;
     va_start(args, fmt);
-    vsprintf(buf, fmt, args);
+    vsnprintf(buf, sizeof(buf), fmt, args);
     va_end(args);
 
     write_to_buffer(d, buf, 0);
   }
 
-  void bugf(char *fmt, ...) {
+  void bugf(const char *fmt, ...) {
     char buf[MSL];
     va_list args;
     va_start(args, fmt);
-    vsprintf(buf, fmt, args);
+    vsnprintf(buf, sizeof(buf), fmt, args);
     va_end(args);
 
     bug(buf, 0);
   }
 
-  void logfi(char *fmt, ...) {
+  int logfi(const char *fmt, ...) {
     char buf[MSL];
     va_list args;
     va_start(args, fmt);
-    vsprintf(buf, fmt, args);
+    vsnprintf(buf, sizeof(buf), fmt, args);
     va_end(args);
 
     log_string(buf);
+    return 0;
   }
 
   int color(char type, CHAR_DATA *ch, char *string) {
@@ -5852,17 +5925,21 @@ extern "C" {
       d->connected = CON_GET_NAME;
 
       {
-        extern char *help_greeting[1];
+        extern char *help_greeting[];
         extern int greeting_count;
         int greet = 0;
 
-        greet = number_range(0, MAX_LEVEL) % greeting_count;
-
-        if (help_greeting[greet][0] == '.')
-        write_to_buffer(d, help_greeting[greet] + 1, 0);
-        else
-        write_to_buffer(d, help_greeting[greet], 0);
+        if (greeting_count > 0) {
+          greet = number_range(0, MAX_LEVEL) % greeting_count;
+          if (help_greeting[greet] != NULL) {
+            if (help_greeting[greet][0] == '.')
+            write_to_buffer(d, help_greeting[greet] + 1, 0);
+            else
+            write_to_buffer(d, help_greeting[greet], 0);
+          }
+        }
       }
+      write_to_buffer(d, "What is the name of your account? ", 0);
       return;
     }
     else {
@@ -6323,7 +6400,7 @@ extern "C" {
     int a;
 
     if (argument[0] == '\0') {
-      close_desc(d);
+      write_to_buffer(d, "What is the name of your account? ", 0);
       return FALSE;
     }
 
@@ -7557,8 +7634,9 @@ extern "C" {
       state_read_imotd(d, argument, ch);
       break;
 
-    case CON_READ_MOTD:
-      state_read_motd(d, argument, ch);
+	case CON_READ_MOTD:
+	  state_read_motd(d, argument, ch);
+  	  break;
 
     case CON_IDENT_WAIT:
       break;
@@ -7769,48 +7847,10 @@ extern "C" {
     return FALSE;
   }
 
-   /* Disabling forum stuff for general release
   _DOFUN(do_forumregister) {
-    char arg1[MSL];
-    argument = one_argument_nouncap(argument, arg1);
-
-    if (!strcmp(crypt(arg1, ch->pcdata->account->pwd), ch->pcdata->account->pwd)) {
-      if (strcmp(arg1, "") && safe_strlen(arg1) >= 5) {
-        // Writing usrrgtmp.txt for forum registration - Discordance
-        FILE *fp;
-
-        if ((fp = fopen("haven/player/usrrgtmp.txt", "a")) == NULL) {
-          perror("/var/www/html/forum/usrrgtmp.txt");
-        }
-        else {
-          fprintf(fp, "%s\n", ch->pcdata->account->name);
-          fprintf(fp, "%s\n", arg1);
-          fprintf(fp, "%s\n", arg1);
-          // fprintf( fp, "%s\n", ch->pcdata->email);
-          // fprintf( fp, "%s\n", ch->pcdata->email);
-          fprintf(fp, "none@havenrpg.net\n");
-          fprintf(fp, "none@havenrpg.net\n");
-          fclose(fp);
-        }
-
-        // Running PHP script to add user to forum based on usrrgtmp.txt info -
-        // Discordance
-        system("php /var/www/html/forum/usrrg.php");
-        system("rm -f haven/player/usrrgtmp.txt");
-      }
-      else {
-        send_to_char("Passwords must be at least 5 characters long.\n\r", ch);
-        send_to_char("`cSyntax`g: `Wforumregister `g(`Wpassword`g)\n\r", ch);
-        return;
-      }
-    }
-    else {
-      send_to_char("Password doesn't match or improper syntax.\n\r", ch);
-      send_to_char("`cSyntax`g: `Wforumregister `g(`Wpassword`g)\n\r", ch);
-    }
+    send_to_char("Forum registration is currently disabled.\n\r", ch);
     return;
   }
-  */
 
   _DOFUN(do_next) {
     char buf[MSL];

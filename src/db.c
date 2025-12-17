@@ -7,10 +7,14 @@
 #include "Note.h"
 
 #if defined(WIN32)
+#ifdef _WIN32
 #include <process.h>
+#endif
 #endif
 
 #include "merc.h"
+#include <string.h>
+#include <stdio.h>
 #include "db.h"
 #include "recycle.h"
 #include "music.h"
@@ -31,6 +35,107 @@ extern "C" {
 #define random rand
 #define srandom srand
 #endif
+
+  static const char *path_basename(const char *path) {
+    if (path == NULL)
+      return "";
+    const char *slash = strrchr(path, '/');
+    const char *bslash = strrchr(path, '\\');
+    const char *sep = NULL;
+    if (slash != NULL && bslash != NULL)
+      sep = (slash > bslash) ? slash : bslash;
+    else
+      sep = (slash != NULL) ? slash : bslash;
+    return (sep != NULL) ? (sep + 1) : path;
+  }
+
+  static FILE *fopen_area_file(const char *filename) {
+    FILE *fp = fopen(filename, "r");
+    if (fp != NULL)
+      return fp;
+
+    /* Fall back to opening files relative to the directory containing AREA_LIST. */
+    char listpath[MSL];
+    char dirpath[MSL];
+    char fullpath[MSL];
+
+    snprintf(listpath, sizeof(listpath), "%s", AREA_LIST);
+    char *slash = strrchr(listpath, '/');
+    char *bslash = strrchr(listpath, '\\');
+    char *sep = NULL;
+    if (slash != NULL && bslash != NULL)
+      sep = (slash > bslash) ? slash : bslash;
+    else
+      sep = (slash != NULL) ? slash : bslash;
+
+    if (sep != NULL) {
+      size_t dirlen = (size_t)(sep - listpath) + 1;
+      if (dirlen < sizeof(dirpath)) {
+        memcpy(dirpath, listpath, dirlen);
+        dirpath[dirlen] = '\0';
+
+        if (snprintf(fullpath, sizeof(fullpath), "%s%s", dirpath, filename) < (int)sizeof(fullpath)) {
+          fp = fopen(fullpath, "r");
+          if (fp != NULL)
+            return fp;
+        }
+      }
+    }
+
+    /* Fall back to common repo layouts (run from repo root or src/). */
+    if (snprintf(fullpath, sizeof(fullpath), "area/%s", filename) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    if (snprintf(fullpath, sizeof(fullpath), "./area/%s", filename) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    if (snprintf(fullpath, sizeof(fullpath), "../area/%s", filename) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    return NULL;
+  }
+
+  static FILE *fopen_area_list(void) {
+    FILE *fp = fopen(AREA_LIST, "r");
+    if (fp != NULL)
+      return fp;
+
+    const char *listfile = path_basename(AREA_LIST);
+    char fullpath[MSL];
+
+    fp = fopen(listfile, "r");
+    if (fp != NULL)
+      return fp;
+
+    if (snprintf(fullpath, sizeof(fullpath), "area/%s", listfile) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    if (snprintf(fullpath, sizeof(fullpath), "./area/%s", listfile) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    if (snprintf(fullpath, sizeof(fullpath), "../area/%s", listfile) < (int)sizeof(fullpath)) {
+      fp = fopen(fullpath, "r");
+      if (fp != NULL)
+        return fp;
+    }
+
+    return NULL;
+  }
 
 
   /* externals for counting purposes */
@@ -62,7 +167,8 @@ extern "C" {
   char bug_buf[2 * MAX_INPUT_LENGTH];
   CharList char_list;
   ChestList chest_list;
-  char *help_greeting[3];
+  #define MAX_GREETINGS 64
+  char *help_greeting[MAX_GREETINGS];
   char *help_inferno;
   char *help_story;
   char *help_motd;
@@ -336,30 +442,38 @@ extern "C" {
 * Assign gsn's for blademaster forms
 */
 
-    /*
-* Read in all the area files.
-*/
+  /*
+ * Read in all the area files.
+ */
     {
       FILE *fpList;
 
-      if ((fpList = fopen(AREA_LIST, "r")) == NULL) {
+      if ((fpList = fopen_area_list()) == NULL) {
         perror(AREA_LIST);
         exit(1);
       }
 
       for (;;) {
-        strcpy(strArea, fread_word(fpList));
+        const char *area_word = fread_word(fpList);
+        if (area_word == NULL || area_word[0] == '\0')
+          break;
+        if (strlen(area_word) >= sizeof(strArea)) {
+          bug("AREA_LIST entry too long", 0);
+          exit(1);
+        }
+        snprintf(strArea, sizeof(strArea), "%s", area_word);
         if (strArea[0] == '$')
-        break;
+          break;
 
         if (strArea[0] == '-') {
           fpArea = stdin;
         }
         else {
-          log_string("Loading Subarea");
-          log_string(strArea);
+         log_string("Loading Subarea");
+         log_string(strArea);
 
-          if ((fpArea = fopen(strArea, "r")) == NULL) {
+          fpArea = fopen_area_file(strArea);
+          if (fpArea == NULL) {
             perror(strArea);
             exit(1);
           }
@@ -717,8 +831,10 @@ break;                          \
       case 'E':
         if (!strcmp(word, "End")) {
           if (!str_prefix("greeting", pHelp->keyword)) {
-            help_greeting[greeting_count] = pHelp->text;
-            greeting_count++;
+            if (greeting_count < MAX_GREETINGS) {
+              help_greeting[greeting_count] = pHelp->text;
+              greeting_count++;
+            }
           }
           if (!str_prefix("infernohelp", pHelp->keyword)) {
             help_inferno = pHelp->text;
